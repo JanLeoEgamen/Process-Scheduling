@@ -102,7 +102,7 @@ namespace OPERATINGSYSTEMPROJECT {
 	private: System::Windows::Forms::ListBox^ lbDisplay;
 	private: System::Windows::Forms::Button^ btnClear;
 	private: System::Windows::Forms::DataGridView^ dgDisplay;
-	private: System::Windows::Forms::TextBox^ tbBT;
+
 	private: System::Windows::Forms::TextBox^ tbAT;
 	private: System::Windows::Forms::Button^ btnCompute;
 	private: System::Windows::Forms::Label^ lblAT;
@@ -115,6 +115,12 @@ namespace OPERATINGSYSTEMPROJECT {
 	private: System::Windows::Forms::Label^ lblAWT;
 	private: System::Windows::Forms::Label^ lblCPU;
 	private: System::Windows::Forms::Label^ lblDisp;
+	private: System::Windows::Forms::MenuStrip^ menuStrip1;
+	private: System::Windows::Forms::ToolStripMenuItem^ aboutToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^ creditToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^ creditsToolStripMenuItem;
+	private: System::Windows::Forms::TextBox^ tbBT;
+
 
 
 
@@ -143,7 +149,6 @@ namespace OPERATINGSYSTEMPROJECT {
 			this->lbDisplay = (gcnew System::Windows::Forms::ListBox());
 			this->btnClear = (gcnew System::Windows::Forms::Button());
 			this->dgDisplay = (gcnew System::Windows::Forms::DataGridView());
-			this->tbBT = (gcnew System::Windows::Forms::TextBox());
 			this->tbAT = (gcnew System::Windows::Forms::TextBox());
 			this->btnCompute = (gcnew System::Windows::Forms::Button());
 			this->lblAT = (gcnew System::Windows::Forms::Label());
@@ -156,16 +161,24 @@ namespace OPERATINGSYSTEMPROJECT {
 			this->lblAWT = (gcnew System::Windows::Forms::Label());
 			this->lblCPU = (gcnew System::Windows::Forms::Label());
 			this->lblDisp = (gcnew System::Windows::Forms::Label());
+			this->menuStrip1 = (gcnew System::Windows::Forms::MenuStrip());
+			this->aboutToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->creditToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->creditsToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->tbBT = (gcnew System::Windows::Forms::TextBox());
 			this->gbAlgo->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dgDisplay))->BeginInit();
+			this->menuStrip1->SuspendLayout();
 			this->SuspendLayout();
 			// 
 			// rbFCFS
 			// 
 			this->rbFCFS->AutoSize = true;
+			this->rbFCFS->Font = (gcnew System::Drawing::Font(L"Yu Gothic UI", 8.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
 			this->rbFCFS->Location = System::Drawing::Point(18, 19);
 			this->rbFCFS->Name = L"rbFCFS";
-			this->rbFCFS->Size = System::Drawing::Size(127, 17);
+			this->rbFCFS->Size = System::Drawing::Size(131, 17);
 			this->rbFCFS->TabIndex = 1;
 			this->rbFCFS->TabStop = true;
 			this->rbFCFS->Text = L"First Come First Serve";
@@ -175,9 +188,11 @@ namespace OPERATINGSYSTEMPROJECT {
 			// rbnpp
 			// 
 			this->rbnpp->AutoSize = true;
+			this->rbnpp->Font = (gcnew System::Drawing::Font(L"Yu Gothic UI", 8.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
 			this->rbnpp->Location = System::Drawing::Point(18, 42);
 			this->rbnpp->Name = L"rbnpp";
-			this->rbnpp->Size = System::Drawing::Size(135, 17);
+			this->rbnpp->Size = System::Drawing::Size(141, 17);
 			this->rbnpp->TabIndex = 2;
 			this->rbnpp->TabStop = true;
 			this->rbnpp->Text = L"Non Preemprive Priority";
@@ -187,9 +202,11 @@ namespace OPERATINGSYSTEMPROJECT {
 			// rbSRTF
 			// 
 			this->rbSRTF->AutoSize = true;
+			this->rbSRTF->Font = (gcnew System::Drawing::Font(L"Yu Gothic UI", 8.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
 			this->rbSRTF->Location = System::Drawing::Point(18, 65);
 			this->rbSRTF->Name = L"rbSRTF";
-			this->rbSRTF->Size = System::Drawing::Size(165, 17);
+			this->rbSRTF->Size = System::Drawing::Size(172, 17);
 			this->rbSRTF->TabIndex = 3;
 			this->rbSRTF->TabStop = true;
 			this->rbSRTF->Text = L"Shortest Remaining Time First";
@@ -201,7 +218,9 @@ namespace OPERATINGSYSTEMPROJECT {
 			this->gbAlgo->Controls->Add(this->rbSRTF);
 			this->gbAlgo->Controls->Add(this->rbFCFS);
 			this->gbAlgo->Controls->Add(this->rbnpp);
-			this->gbAlgo->Location = System::Drawing::Point(24, 302);
+			this->gbAlgo->Font = (gcnew System::Drawing::Font(L"Lucida Bright", 8.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->gbAlgo->Location = System::Drawing::Point(28, 382);
 			this->gbAlgo->Name = L"gbAlgo";
 			this->gbAlgo->Size = System::Drawing::Size(198, 90);
 			this->gbAlgo->TabIndex = 4;
@@ -211,77 +230,87 @@ namespace OPERATINGSYSTEMPROJECT {
 			// 
 			// lbDisplay
 			// 
+			this->lbDisplay->BackColor = System::Drawing::Color::White;
 			this->lbDisplay->FormattingEnabled = true;
-			this->lbDisplay->Location = System::Drawing::Point(238, 357);
+			this->lbDisplay->Location = System::Drawing::Point(239, 382);
 			this->lbDisplay->Name = L"lbDisplay";
-			this->lbDisplay->Size = System::Drawing::Size(553, 225);
+			this->lbDisplay->Size = System::Drawing::Size(627, 225);
 			this->lbDisplay->TabIndex = 6;
 			this->lbDisplay->SelectedIndexChanged += gcnew System::EventHandler(this, &MyForm::lbDisplay_SelectedIndexChanged_1);
 			// 
 			// btnClear
 			// 
-			this->btnClear->Location = System::Drawing::Point(80, 458);
+			this->btnClear->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(187)), static_cast<System::Int32>(static_cast<System::Byte>(197)),
+				static_cast<System::Int32>(static_cast<System::Byte>(170)));
+			this->btnClear->Location = System::Drawing::Point(84, 514);
 			this->btnClear->Name = L"btnClear";
 			this->btnClear->Size = System::Drawing::Size(89, 36);
 			this->btnClear->TabIndex = 7;
 			this->btnClear->Text = L"Clear History";
-			this->btnClear->UseVisualStyleBackColor = true;
+			this->btnClear->UseVisualStyleBackColor = false;
 			this->btnClear->Click += gcnew System::EventHandler(this, &MyForm::btnClear_Click);
 			// 
 			// dgDisplay
 			// 
+			this->dgDisplay->BackgroundColor = System::Drawing::Color::White;
 			this->dgDisplay->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
-			this->dgDisplay->Location = System::Drawing::Point(238, 56);
+			this->dgDisplay->Location = System::Drawing::Point(239, 75);
 			this->dgDisplay->Name = L"dgDisplay";
 			this->dgDisplay->Size = System::Drawing::Size(627, 230);
 			this->dgDisplay->TabIndex = 8;
 			this->dgDisplay->CellContentClick += gcnew System::Windows::Forms::DataGridViewCellEventHandler(this, &MyForm::dgDisplay_CellContentClick);
 			// 
-			// tbBT
-			// 
-			this->tbBT->Location = System::Drawing::Point(34, 158);
-			this->tbBT->Name = L"tbBT";
-			this->tbBT->Size = System::Drawing::Size(188, 20);
-			this->tbBT->TabIndex = 1;
-			// 
 			// tbAT
 			// 
-			this->tbAT->Location = System::Drawing::Point(34, 115);
+			this->tbAT->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(230)), static_cast<System::Int32>(static_cast<System::Byte>(238)),
+				static_cast<System::Int32>(static_cast<System::Byte>(214)));
+			this->tbAT->Location = System::Drawing::Point(28, 152);
 			this->tbAT->Name = L"tbAT";
 			this->tbAT->Size = System::Drawing::Size(188, 20);
 			this->tbAT->TabIndex = 0;
+			this->tbAT->TextChanged += gcnew System::EventHandler(this, &MyForm::tbAT_TextChanged);
 			// 
 			// btnCompute
 			// 
-			this->btnCompute->Location = System::Drawing::Point(80, 241);
+			this->btnCompute->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(187)), static_cast<System::Int32>(static_cast<System::Byte>(197)),
+				static_cast<System::Int32>(static_cast<System::Byte>(170)));
+			this->btnCompute->Location = System::Drawing::Point(84, 270);
 			this->btnCompute->Name = L"btnCompute";
 			this->btnCompute->Size = System::Drawing::Size(89, 36);
 			this->btnCompute->TabIndex = 2;
 			this->btnCompute->Text = L"Compute";
-			this->btnCompute->UseVisualStyleBackColor = true;
+			this->btnCompute->UseVisualStyleBackColor = false;
 			this->btnCompute->Click += gcnew System::EventHandler(this, &MyForm::btnCompute_Click);
 			// 
 			// lblAT
 			// 
 			this->lblAT->AutoSize = true;
-			this->lblAT->Location = System::Drawing::Point(30, 99);
+			this->lblAT->Font = (gcnew System::Drawing::Font(L"Yu Gothic UI", 8.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->lblAT->Location = System::Drawing::Point(25, 131);
 			this->lblAT->Name = L"lblAT";
-			this->lblAT->Size = System::Drawing::Size(62, 13);
+			this->lblAT->Size = System::Drawing::Size(66, 13);
 			this->lblAT->TabIndex = 3;
 			this->lblAT->Text = L"Arrival Time";
+			this->lblAT->Click += gcnew System::EventHandler(this, &MyForm::lblAT_Click);
 			// 
 			// lblBT
 			// 
 			this->lblBT->AutoSize = true;
-			this->lblBT->Location = System::Drawing::Point(30, 142);
+			this->lblBT->Font = (gcnew System::Drawing::Font(L"Yu Gothic UI", 8.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->lblBT->Location = System::Drawing::Point(25, 177);
 			this->lblBT->Name = L"lblBT";
-			this->lblBT->Size = System::Drawing::Size(57, 13);
+			this->lblBT->Size = System::Drawing::Size(59, 13);
 			this->lblBT->TabIndex = 4;
 			this->lblBT->Text = L"Burst Time";
+			this->lblBT->Click += gcnew System::EventHandler(this, &MyForm::lblBT_Click);
 			// 
 			// tbprio
 			// 
-			this->tbprio->Location = System::Drawing::Point(34, 206);
+			this->tbprio->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(230)), static_cast<System::Int32>(static_cast<System::Byte>(238)),
+				static_cast<System::Int32>(static_cast<System::Byte>(214)));
+			this->tbprio->Location = System::Drawing::Point(28, 246);
 			this->tbprio->Name = L"tbprio";
 			this->tbprio->Size = System::Drawing::Size(188, 20);
 			this->tbprio->TabIndex = 5;
@@ -290,36 +319,44 @@ namespace OPERATINGSYSTEMPROJECT {
 			// lblPrio
 			// 
 			this->lblPrio->AutoSize = true;
-			this->lblPrio->Location = System::Drawing::Point(30, 190);
+			this->lblPrio->Font = (gcnew System::Drawing::Font(L"Yu Gothic UI", 8.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->lblPrio->Location = System::Drawing::Point(25, 226);
 			this->lblPrio->Name = L"lblPrio";
-			this->lblPrio->Size = System::Drawing::Size(38, 13);
+			this->lblPrio->Size = System::Drawing::Size(42, 13);
 			this->lblPrio->TabIndex = 6;
 			this->lblPrio->Text = L"Priority";
+			this->lblPrio->Click += gcnew System::EventHandler(this, &MyForm::lblPrio_Click);
 			// 
 			// lblAlgo
 			// 
 			this->lblAlgo->AutoSize = true;
-			this->lblAlgo->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 20, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+			this->lblAlgo->Font = (gcnew System::Drawing::Font(L"Lucida Bright", 20.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->lblAlgo->Location = System::Drawing::Point(242, 9);
+			this->lblAlgo->Location = System::Drawing::Point(233, 36);
 			this->lblAlgo->Name = L"lblAlgo";
-			this->lblAlgo->Size = System::Drawing::Size(199, 31);
+			this->lblAlgo->Size = System::Drawing::Size(207, 32);
 			this->lblAlgo->TabIndex = 9;
 			this->lblAlgo->Text = L"Welcome User!";
+			this->lblAlgo->UseMnemonic = false;
+			this->lblAlgo->Click += gcnew System::EventHandler(this, &MyForm::lblAlgo_Click);
 			// 
 			// lblHistory
 			// 
 			this->lblHistory->AutoSize = true;
-			this->lblHistory->Location = System::Drawing::Point(235, 341);
+			this->lblHistory->Font = (gcnew System::Drawing::Font(L"Lucida Bright", 20.25F));
+			this->lblHistory->Location = System::Drawing::Point(233, 342);
 			this->lblHistory->Name = L"lblHistory";
-			this->lblHistory->Size = System::Drawing::Size(39, 13);
+			this->lblHistory->Size = System::Drawing::Size(111, 32);
 			this->lblHistory->TabIndex = 10;
 			this->lblHistory->Text = L"History";
 			// 
 			// lblATT
 			// 
 			this->lblATT->AutoSize = true;
-			this->lblATT->Location = System::Drawing::Point(461, 302);
+			this->lblATT->Font = (gcnew System::Drawing::Font(L"Yu Gothic UI", 8.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->lblATT->Location = System::Drawing::Point(390, 325);
 			this->lblATT->Name = L"lblATT";
 			this->lblATT->Size = System::Drawing::Size(141, 13);
 			this->lblATT->TabIndex = 11;
@@ -329,36 +366,91 @@ namespace OPERATINGSYSTEMPROJECT {
 			// lblAWT
 			// 
 			this->lblAWT->AutoSize = true;
-			this->lblAWT->Location = System::Drawing::Point(461, 325);
+			this->lblAWT->Font = (gcnew System::Drawing::Font(L"Yu Gothic UI", 8.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->lblAWT->Location = System::Drawing::Point(390, 348);
 			this->lblAWT->Name = L"lblAWT";
-			this->lblAWT->Size = System::Drawing::Size(118, 13);
+			this->lblAWT->Size = System::Drawing::Size(120, 13);
 			this->lblAWT->TabIndex = 12;
 			this->lblAWT->Text = L"Average Waiting Time: ";
 			// 
 			// lblCPU
 			// 
 			this->lblCPU->AutoSize = true;
-			this->lblCPU->Location = System::Drawing::Point(678, 302);
+			this->lblCPU->Font = (gcnew System::Drawing::Font(L"Yu Gothic UI", 8.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->lblCPU->Location = System::Drawing::Point(690, 325);
 			this->lblCPU->Name = L"lblCPU";
-			this->lblCPU->Size = System::Drawing::Size(83, 13);
+			this->lblCPU->Size = System::Drawing::Size(87, 13);
 			this->lblCPU->TabIndex = 13;
 			this->lblCPU->Text = L"CPU Utilization: ";
+			this->lblCPU->Click += gcnew System::EventHandler(this, &MyForm::lblCPU_Click);
 			// 
 			// lblDisp
 			// 
 			this->lblDisp->AutoSize = true;
-			this->lblDisp->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 10, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+			this->lblDisp->Font = (gcnew System::Drawing::Font(L"Lucida Bright", 12.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->lblDisp->Location = System::Drawing::Point(21, 34);
+			this->lblDisp->Location = System::Drawing::Point(24, 75);
 			this->lblDisp->Name = L"lblDisp";
-			this->lblDisp->Size = System::Drawing::Size(200, 17);
+			this->lblDisp->Size = System::Drawing::Size(176, 40);
 			this->lblDisp->TabIndex = 14;
-			this->lblDisp->Text = L"Process Scheduling Algorithm:";
+			this->lblDisp->Text = L"Process Scheduling \r\nAlgorithm:";
+			this->lblDisp->Click += gcnew System::EventHandler(this, &MyForm::lblDisp_Click);
+			// 
+			// menuStrip1
+			// 
+			this->menuStrip1->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(187)), static_cast<System::Int32>(static_cast<System::Byte>(197)),
+				static_cast<System::Int32>(static_cast<System::Byte>(170)));
+			this->menuStrip1->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(1) { this->aboutToolStripMenuItem });
+			this->menuStrip1->Location = System::Drawing::Point(0, 0);
+			this->menuStrip1->Name = L"menuStrip1";
+			this->menuStrip1->Size = System::Drawing::Size(930, 24);
+			this->menuStrip1->TabIndex = 15;
+			this->menuStrip1->Text = L"menuStrip1";
+			this->menuStrip1->ItemClicked += gcnew System::Windows::Forms::ToolStripItemClickedEventHandler(this, &MyForm::menuStrip1_ItemClicked);
+			// 
+			// aboutToolStripMenuItem
+			// 
+			this->aboutToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) {
+				this->creditToolStripMenuItem,
+					this->creditsToolStripMenuItem
+			});
+			this->aboutToolStripMenuItem->Name = L"aboutToolStripMenuItem";
+			this->aboutToolStripMenuItem->Size = System::Drawing::Size(52, 20);
+			this->aboutToolStripMenuItem->Text = L"About";
+			this->aboutToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::aboutToolStripMenuItem_Click);
+			// 
+			// creditToolStripMenuItem
+			// 
+			this->creditToolStripMenuItem->Name = L"creditToolStripMenuItem";
+			this->creditToolStripMenuItem->Size = System::Drawing::Size(140, 22);
+			this->creditToolStripMenuItem->Text = L"User Manual";
+			this->creditToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::creditToolStripMenuItem_Click);
+			// 
+			// creditsToolStripMenuItem
+			// 
+			this->creditsToolStripMenuItem->Name = L"creditsToolStripMenuItem";
+			this->creditsToolStripMenuItem->Size = System::Drawing::Size(180, 22);
+			this->creditsToolStripMenuItem->Text = L"Credits";
+			this->creditsToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::creditsToolStripMenuItem_Click);
+			// 
+			// tbBT
+			// 
+			this->tbBT->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(230)), static_cast<System::Int32>(static_cast<System::Byte>(238)),
+				static_cast<System::Int32>(static_cast<System::Byte>(214)));
+			this->tbBT->Location = System::Drawing::Point(28, 197);
+			this->tbBT->Name = L"tbBT";
+			this->tbBT->Size = System::Drawing::Size(188, 20);
+			this->tbBT->TabIndex = 1;
+			this->tbBT->TextChanged += gcnew System::EventHandler(this, &MyForm::tbBT_TextChanged);
 			// 
 			// MyForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
+			this->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(221)), static_cast<System::Int32>(static_cast<System::Byte>(226)),
+				static_cast<System::Int32>(static_cast<System::Byte>(198)));
 			this->ClientSize = System::Drawing::Size(930, 625);
 			this->Controls->Add(this->lblDisp);
 			this->Controls->Add(this->lblCPU);
@@ -377,12 +469,17 @@ namespace OPERATINGSYSTEMPROJECT {
 			this->Controls->Add(this->gbAlgo);
 			this->Controls->Add(this->tbAT);
 			this->Controls->Add(this->tbBT);
+			this->Controls->Add(this->menuStrip1);
+			this->ForeColor = System::Drawing::Color::Black;
+			this->MainMenuStrip = this->menuStrip1;
 			this->Name = L"MyForm";
 			this->Text = L"MyForm";
 			this->Load += gcnew System::EventHandler(this, &MyForm::MyForm_Load);
 			this->gbAlgo->ResumeLayout(false);
 			this->gbAlgo->PerformLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dgDisplay))->EndInit();
+			this->menuStrip1->ResumeLayout(false);
+			this->menuStrip1->PerformLayout();
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
@@ -974,5 +1071,40 @@ private: System::Void gbAlgo_Enter(System::Object^ sender, System::EventArgs^ e)
 }
 private: System::Void lblATT_Click(System::Object^ sender, System::EventArgs^ e) {
 }
+private: System::Void lblAlgo_Click(System::Object^ sender, System::EventArgs^ e) {
+}
+private: System::Void lblDisp_Click(System::Object^ sender, System::EventArgs^ e) {
+}
+private: System::Void lblCPU_Click(System::Object^ sender, System::EventArgs^ e) {
+}
+private: System::Void creditToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
+	//
+	// For User Manual
+	//
+	MessageBox::Show("This Shows The User Manual","User Manual",MessageBoxButtons:: OK ,MessageBoxIcon::Information);
+
+}
+private: System::Void menuStrip1_ItemClicked(System::Object^ sender, System::Windows::Forms::ToolStripItemClickedEventArgs^ e) {
+}
+private: System::Void lblPrio_Click(System::Object^ sender, System::EventArgs^ e) {
+}
+private: System::Void tbBT_TextChanged(System::Object^ sender, System::EventArgs^ e) {
+}
+private: System::Void lblBT_Click(System::Object^ sender, System::EventArgs^ e) {
+}
+private: System::Void tbAT_TextChanged(System::Object^ sender, System::EventArgs^ e) {
+}
+private: System::Void lblAT_Click(System::Object^ sender, System::EventArgs^ e) {
+}
+private: System::Void aboutToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
+}
+private: System::Void creditsToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
+	//
+	// For Credits (Authors)
+	//
+	MessageBox::Show("Created by BSIT 2-1 A.Y. 2023\n\nLead Programmer:\nJan Leo B. Egamen\n\nBackend Developers: \nEmma Marie S. Hechanova \nMa. Ellyza R. Teñiero \n\nFrontend Developer: \nAlec Godwin C. Almirañez \n\nTechnical Writer: \nVince Gabriel G. Razon ","Authors", MessageBoxButtons:: OK, MessageBoxIcon::Information
+	);
+}
+
 };
 }
