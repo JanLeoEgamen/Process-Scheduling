@@ -1,0 +1,21 @@
+﻿  MyForm.cpp
+C:\Users\Jan Leo Egamen\source\repos\OPERATINGSYSTEMPROJECT\OPERATINGSYSTEMPROJECT\MyForm.h(439,25): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+  (compiling source file 'MyForm.cpp')
+  
+C:\Users\Jan Leo Egamen\source\repos\OPERATINGSYSTEMPROJECT\OPERATINGSYSTEMPROJECT\MyForm.h(601,25): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+  (compiling source file 'MyForm.cpp')
+  
+C:\Users\Jan Leo Egamen\source\repos\OPERATINGSYSTEMPROJECT\OPERATINGSYSTEMPROJECT\MyForm.h(781,25): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+  (compiling source file 'MyForm.cpp')
+  
+C:\Users\Jan Leo Egamen\source\repos\OPERATINGSYSTEMPROJECT\OPERATINGSYSTEMPROJECT\MyForm.h(406,8): warning C4101: 'comma': unreferenced local variable
+  (compiling source file 'MyForm.cpp')
+  
+C:\Users\Jan Leo Egamen\source\repos\OPERATINGSYSTEMPROJECT\OPERATINGSYSTEMPROJECT\MyForm.h(552,8): warning C4101: 'comma': unreferenced local variable
+  (compiling source file 'MyForm.cpp')
+  
+C:\Users\Jan Leo Egamen\source\repos\OPERATINGSYSTEMPROJECT\OPERATINGSYSTEMPROJECT\MyForm.h(748,8): warning C4101: 'comma': unreferenced local variable
+  (compiling source file 'MyForm.cpp')
+  
+  MyForm.obj : MSIL module encountered; incremental linking is disabled for MSIL; performing full link
+  OPERATINGSYSTEMPROJECT.vcxproj -> C:\Users\Jan Leo Egamen\source\repos\OPERATINGSYSTEMPROJECT\x64\Debug\OPERATINGSYSTEMPROJECT.exe
