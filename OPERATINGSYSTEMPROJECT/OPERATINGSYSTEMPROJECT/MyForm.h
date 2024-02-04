@@ -41,7 +41,7 @@ namespace OPERATINGSYSTEMPROJECT {
 		return a.id < b.id;
 	}
 
-	
+
 	// Comparison functions for sorting processes
 	bool compareArrival(Process p1, Process p2) {
 		return p1.arrivalTime < p2.arrivalTime;
@@ -133,7 +133,7 @@ namespace OPERATINGSYSTEMPROJECT {
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
-		System::ComponentModel::Container ^components;
+		System::ComponentModel::Container^ components;
 
 #pragma region Windows Form Designer generated code
 		/// <summary>
@@ -274,7 +274,7 @@ namespace OPERATINGSYSTEMPROJECT {
 			// 
 			this->btnCompute->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(187)), static_cast<System::Int32>(static_cast<System::Byte>(197)),
 				static_cast<System::Int32>(static_cast<System::Byte>(170)));
-			this->btnCompute->Location = System::Drawing::Point(84, 270);
+			this->btnCompute->Location = System::Drawing::Point(75, 283);
 			this->btnCompute->Name = L"btnCompute";
 			this->btnCompute->Size = System::Drawing::Size(89, 36);
 			this->btnCompute->TabIndex = 2;
@@ -431,7 +431,7 @@ namespace OPERATINGSYSTEMPROJECT {
 			// creditsToolStripMenuItem
 			// 
 			this->creditsToolStripMenuItem->Name = L"creditsToolStripMenuItem";
-			this->creditsToolStripMenuItem->Size = System::Drawing::Size(180, 22);
+			this->creditsToolStripMenuItem->Size = System::Drawing::Size(140, 22);
 			this->creditsToolStripMenuItem->Text = L"Credits";
 			this->creditsToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::creditsToolStripMenuItem_Click);
 			// 
@@ -496,615 +496,616 @@ namespace OPERATINGSYSTEMPROJECT {
 	}
 
 
-private: System::Void btnCompute_Click(System::Object^ sender, System::EventArgs^ e) {
-	//check the algo before computation
+	private: System::Void btnCompute_Click(System::Object^ sender, System::EventArgs^ e) {
+		//check the algo before computation
 
-	if (rbFCFS->Checked) {
-		// Declare variables to store process information and various metrics
-		int numProcesses;
-		vector<Process> processes;
-		float avgTurnaroundTime, avgWaitingTime, avgResponseTime, cpuUtilization, throughput;
-		int totalTurnaroundTime = 0, totalWaitingTime = 0, totalResponseTime = 0, totalIdleTime = 0;
-		String^ tempBurstTime, ^ tempArrivalTime = "";
+		if (rbFCFS->Checked) {
+			// Declare variables to store process information and various metrics
+			int numProcesses;
+			vector<Process> processes;
+			float avgTurnaroundTime, avgWaitingTime, avgResponseTime, cpuUtilization, throughput;
+			int totalTurnaroundTime = 0, totalWaitingTime = 0, totalResponseTime = 0, totalIdleTime = 0;
+			String^ tempBurstTime, ^ tempArrivalTime = "";
 
-		// Input handling for arrival times
-		tempArrivalTime = tbAT->Text;
-		string arrivalTimeStr = msclr::interop::marshal_as<std::string>(tempArrivalTime);
-		istringstream iss(arrivalTimeStr);
+			// Input handling for arrival times
+			tempArrivalTime = tbAT->Text;
+			string arrivalTimeStr = msclr::interop::marshal_as<std::string>(tempArrivalTime);
+			istringstream iss(arrivalTimeStr);
 
-		// Read arrival times and store them in the 'at' vector
-		vector<int> at;
-		char comma;  // Variable to store the comma
-		for (int number; iss >> number || (iss.eof() && at.empty());) {
-			at.push_back(number);
+			// Read arrival times and store them in the 'at' vector
+			vector<int> at;
+			char comma;  // Variable to store the comma
+			for (int number; iss >> number || (iss.eof() && at.empty());) {
+				at.push_back(number);
 
-			// Check for a comma and consume it if not at the end of the input
-			if (iss >> std::ws && iss.peek() == ',') {
-				iss.ignore();
+				// Check for a comma and consume it if not at the end of the input
+				if (iss >> std::ws && iss.peek() == ',') {
+					iss.ignore();
+				}
 			}
-		}
 
-		// Input handling for burst times
-		tempBurstTime = tbBT->Text;
-		std::string burstTimeStr = msclr::interop::marshal_as<std::string>(tempBurstTime);
-		istringstream isss(burstTimeStr);
+			// Input handling for burst times
+			tempBurstTime = tbBT->Text;
+			std::string burstTimeStr = msclr::interop::marshal_as<std::string>(tempBurstTime);
+			istringstream isss(burstTimeStr);
 
-		// Read burst times and store them in the 'bt' vector
-		vector<int> bt;
-		for (int number; isss >> number || (isss.eof() && bt.empty());) {
-			bt.push_back(number);
+			// Read burst times and store them in the 'bt' vector
+			vector<int> bt;
+			for (int number; isss >> number || (isss.eof() && bt.empty());) {
+				bt.push_back(number);
 
-			// Check for a comma and consume it if not at the end of the input
-			if (isss >> std::ws && isss.peek() == ',') {
-				isss.ignore();
+				// Check for a comma and consume it if not at the end of the input
+				if (isss >> std::ws && isss.peek() == ',') {
+					isss.ignore();
+				}
 			}
-		}
 
-		// Validation to check if the number of bt and at is the same, if not exit
-		if (at.size() != bt.size()) {
-			MessageBox::Show("Invalid Input", "Warning", MessageBoxButtons::OK, MessageBoxIcon::Warning);
-			return;
-		}
-
-		// Initialize the number of processes
-		numProcesses = at.size();
-
-		// Store the values to the struct process
-		for (int i = 0; i < numProcesses; i++) {
-			Process process;
-			process.id = i + 1;  // Assign a unique id
-			process.arrivalTime = at[i];
-			process.burstTime = bt[i];
-			processes.push_back(process);
-		}
-
-		// Sort processes based on arrival time
-		sort(processes.begin(), processes.end(), compareArrival);
-
-		// Calculate various metrics for each process
-		for (int i = 0; i < numProcesses; i++) {
-			processes[i].startTime = (i == 0) ? processes[i].arrivalTime : max(processes[i - 1].completionTime, processes[i].arrivalTime);
-			processes[i].completionTime = processes[i].startTime + processes[i].burstTime;
-			processes[i].turnaroundTime = processes[i].completionTime - processes[i].arrivalTime;
-			processes[i].waitingTime = processes[i].turnaroundTime - processes[i].burstTime;
-			processes[i].responseTime = processes[i].startTime - processes[i].arrivalTime;
-
-			// Update cumulative metrics
-			totalTurnaroundTime += processes[i].turnaroundTime;
-			totalWaitingTime += processes[i].waitingTime;
-			totalResponseTime += processes[i].responseTime;
-			totalIdleTime += (i == 0) ? processes[i].arrivalTime : (processes[i].startTime - processes[i - 1].completionTime);
-		}
-
-		// Calculate average metrics
-		avgTurnaroundTime = static_cast<float>(totalTurnaroundTime) / numProcesses;
-		avgWaitingTime = static_cast<float>(totalWaitingTime) / numProcesses;
-		avgResponseTime = static_cast<float>(totalResponseTime) / numProcesses;
-		cpuUtilization = ((processes[numProcesses - 1].completionTime - totalIdleTime) / static_cast<float>(processes[numProcesses - 1].completionTime)) * 100;
-		throughput = static_cast<float>(numProcesses) / (processes[numProcesses - 1].completionTime - processes[0].arrivalTime);
-
-		// Sort processes based on ID for output display
-		sort(processes.begin(), processes.end(), compareID);
-
-		// Display process information in tabular format
-		stdDetails = "{0, -15}{1, -22}{2, -22}{3, -26}{4, -26}{5, -26}{6, -26}";
-		lbDisplay->Items->Add(String::Format(stdDetails, " ", " ", " ", "                      First Come First Serve", " ", " ", " "));
-		lbDisplay->Items->Add(" ");
-		lbDisplay->Items->Add(String::Format(stdDetails, "PID", "Arrival Time", "Burst Time", "Completion Time", "Turn Around Time", "Waiting Time", "Priority"));
-		
-		for (const Process& p : processes) {
-			stdDetails = "{0, -25}{1, -30}{2, -30}{3, -33}{4, -33}{5, -33}{6, -33}";
-			lbDisplay->Items->Add(String::Format(stdDetails, p.id, p.arrivalTime, p.burstTime, p.completionTime, p.turnaroundTime, p.waitingTime, " "));
-
-		}
-		lbDisplay->Items->Add(" "); 
-
-		// for allignment
-		stdDetails = "{0, -15}{1, -25}{2, -25}{3, -25}{4, -25}{5, -25}{6, -25}";
-		lbDisplay->Items->Add(String::Format(stdDetails, " ", " ", "Average Waiting Time: ", avgWaitingTime, "Average Turn Around time:", avgTurnaroundTime, " "));
-
-		lbDisplay->Items->Add(" ");
-
-		lbDisplay->Items->Add(String::Format(stdDetails, " ", " ", " ", " ", "CPU Utilization: ", cpuUtilization, " %", " "));		
-
-		//diplay average
-		lblATT->Text = "Average Turn Around Time: " + avgTurnaroundTime.ToString();
-		lblAWT->Text = "Average Waiting Time: " + avgTurnaroundTime.ToString();
-		lblCPU->Text = "CPU Utilization: " + cpuUtilization.ToString() + " %";
-
-		//space
-		lbDisplay->Items->Add(" ");
-		lbDisplay->Items->Add(" ");
-		lbDisplay->Items->Add(" ");
-
-		//data grid
-		// Assuming dtDisplay is your DataGridView control
-		dgDisplay->Rows->Clear();
-		dgDisplay->Columns->Clear();
-
-		// Add columns to the DataGridView
-		dgDisplay->Columns->Add("PID", "Process ID");
-		dgDisplay->Columns->Add("ArrivalTime", "Arrival Time");
-		dgDisplay->Columns->Add("BurstTime", "Burst Time");
-		dgDisplay->Columns->Add("CompletionTime", "Completion Time");
-		dgDisplay->Columns->Add("TurnaroundTime", "Turn Around Time");
-		dgDisplay->Columns->Add("WaitingTime", "Waiting Time");
-		
-
-		// Display process information in DataGridView
-		for (const Process& p : processes) {
-			dgDisplay->Rows->Add(p.id, p.arrivalTime, p.burstTime, p.completionTime, p.turnaroundTime, p.waitingTime);
-		}
-
-	}
-
-	// NPP ALGO
-	else if (rbnpp->Checked) {
-		int numProcesses;
-		vector<Process> processes;
-		float avgTurnaroundTime;
-		float avgWaitingTime;
-		float avgResponseTime;
-		float cpuUtilization;
-		int totalTurnaroundTime = 0;
-		int totalWaitingTime = 0;
-		int totalResponseTime = 0;
-		int totalIdleTime = 0;
-		float throughput;
-		vector<int> isCompleted;
-		String^ tempBurstTime,^ tempArrivalTime,^ tempPriority;
-
-		tempArrivalTime = tbAT->Text;
-		string arrivalTimeStr = msclr::interop::marshal_as<std::string>(tempArrivalTime);
-		istringstream iss(arrivalTimeStr);
-
-		// Read arrival times and store them in the 'at' vector
-		vector<int> at;
-		char comma;  // Variable to store the comma
-		for (int number; iss >> number || (iss.eof() && at.empty());) {
-			at.push_back(number);
-
-			// Check for a comma and consume it if not at the end of the input
-			if (iss >> std::ws && iss.peek() == ',') {
-				iss.ignore();
+			// Validation to check if the number of bt and at is the same, if not exit
+			if (at.size() != bt.size()) {
+				MessageBox::Show("Invalid Input", "Warning", MessageBoxButtons::OK, MessageBoxIcon::Warning);
+				return;
 			}
-		}
 
-		// Input handling for burst times
-		tempBurstTime = tbBT->Text;
-		std::string burstTimeStr = msclr::interop::marshal_as<std::string>(tempBurstTime);
-		istringstream isss(burstTimeStr);
+			// Initialize the number of processes
+			numProcesses = at.size();
 
-		// Read burst times and store them in the 'bt' vector
-		vector<int> bt;
-		for (int number; isss >> number || (isss.eof() && bt.empty());) {
-			bt.push_back(number);
-
-			// Check for a comma and consume it if not at the end of the input
-			if (isss >> std::ws && isss.peek() == ',') {
-				isss.ignore();
-			}
-		}
-
-
-		// Input handling for priority
-		tempPriority = tbprio->Text;
-		std::string priorityStr = msclr::interop::marshal_as<std::string>(tempPriority);
-		istringstream issss(priorityStr);
-
-		// Read priority times and store them in the 'priority' vector
-		vector<int> priority;
-		for (int number; issss >> number || (issss.eof() && bt.empty());) {
-			priority.push_back(number);
-
-			// Check for a comma and consume it if not at the end of the input
-			if (issss >> std::ws && issss.peek() == ',') {
-				issss.ignore();
-			}
-		}
-
-		// Validation to check if the number of bt and at is the same, if not exit
-		if (priority.size() != bt.size()) {
-			MessageBox::Show("Invalid Input", "Warning", MessageBoxButtons::OK, MessageBoxIcon::Warning);
-			return;
-		}
-		// Initialize the number of processes
-		numProcesses = at.size();
-
-		// Store the values to the struct process
-		for (int i = 0; i < numProcesses; i++) {
-			Process process;
-			process.id = i + 1;  // Assign a unique id
-			process.arrivalTime = at[i];
-			process.burstTime = bt[i];
-			process.priority = priority[i];
-			processes.push_back(process);
-		}
-
-		isCompleted.resize(numProcesses, 0);  // Initialize isCompleted vector
-
-		int currentTime = 0;
-		int completed = 0;
-		int prev = 0;
-
-		// Calculate additional metrics
-		int minArrivalTime = 10000000;
-		int maxCompletionTime = -1; 
-
-		// Schedule processes using Priority Scheduling
-		while (completed != numProcesses) {
-			int idx = -1;
-			int mx = 1000000000; // set mx to a high value
-
-			// Find the process with the highest priority that has arrived
+			// Store the values to the struct process
 			for (int i = 0; i < numProcesses; i++) {
-				if (processes[i].arrivalTime <= currentTime && isCompleted[i] == 0) {
-					if (processes[i].priority < mx) {
-						mx = processes[i].priority;
-						idx = i;
-					}
-					if (processes[i].priority == mx) {
-						if (processes[i].arrivalTime < processes[idx].arrivalTime) {
+				Process process;
+				process.id = i + 1;  // Assign a unique id
+				process.arrivalTime = at[i];
+				process.burstTime = bt[i];
+				processes.push_back(process);
+			}
+
+			// Sort processes based on arrival time
+			sort(processes.begin(), processes.end(), compareArrival);
+
+			// Calculate various metrics for each process
+			for (int i = 0; i < numProcesses; i++) {
+				processes[i].startTime = (i == 0) ? processes[i].arrivalTime : max(processes[i - 1].completionTime, processes[i].arrivalTime);
+				processes[i].completionTime = processes[i].startTime + processes[i].burstTime;
+				processes[i].turnaroundTime = processes[i].completionTime - processes[i].arrivalTime;
+				processes[i].waitingTime = processes[i].turnaroundTime - processes[i].burstTime;
+				processes[i].responseTime = processes[i].startTime - processes[i].arrivalTime;
+
+				// Update cumulative metrics
+				totalTurnaroundTime += processes[i].turnaroundTime;
+				totalWaitingTime += processes[i].waitingTime;
+				totalResponseTime += processes[i].responseTime;
+				totalIdleTime += (i == 0) ? processes[i].arrivalTime : (processes[i].startTime - processes[i - 1].completionTime);
+			}
+
+			// Calculate average metrics
+			avgTurnaroundTime = static_cast<float>(totalTurnaroundTime) / numProcesses;
+			avgWaitingTime = static_cast<float>(totalWaitingTime) / numProcesses;
+			avgResponseTime = static_cast<float>(totalResponseTime) / numProcesses;
+			cpuUtilization = ((processes[numProcesses - 1].completionTime - totalIdleTime) / static_cast<float>(processes[numProcesses - 1].completionTime)) * 100;
+			throughput = static_cast<float>(numProcesses) / (processes[numProcesses - 1].completionTime - processes[0].arrivalTime);
+
+			// Sort processes based on ID for output display
+			sort(processes.begin(), processes.end(), compareID);
+
+			// Display process information in tabular format
+			stdDetails = "{0, -15}{1, -22}{2, -22}{3, -26}{4, -26}{5, -26}{6, -26}";
+			lbDisplay->Items->Add(String::Format(stdDetails, " ", " ", " ", "                      First Come First Serve", " ", " ", " "));
+			lbDisplay->Items->Add(" ");
+			lbDisplay->Items->Add(String::Format(stdDetails, "PID", "Arrival Time", "Burst Time", "Completion Time", "Turn Around Time", "Waiting Time", "Priority"));
+
+			for (const Process& p : processes) {
+				stdDetails = "{0, -25}{1, -30}{2, -30}{3, -33}{4, -33}{5, -33}{6, -33}";
+				lbDisplay->Items->Add(String::Format(stdDetails, p.id, p.arrivalTime, p.burstTime, p.completionTime, p.turnaroundTime, p.waitingTime, " "));
+
+			}
+			lbDisplay->Items->Add(" ");
+
+			// for allignment
+			stdDetails = "{0, -15}{1, -25}{2, -25}{3, -25}{4, -25}{5, -25}{6, -25}";
+			lbDisplay->Items->Add(String::Format(stdDetails, " ", " ", "Average Waiting Time: ", avgWaitingTime, "Average Turn Around time:", avgTurnaroundTime, " "));
+
+			lbDisplay->Items->Add(" ");
+
+			lbDisplay->Items->Add(String::Format(stdDetails, " ", " ", " ", " ", "CPU Utilization: ", cpuUtilization, " %", " "));
+
+			//diplay average
+			lblATT->Text = "Average Turn Around Time: " + avgTurnaroundTime.ToString();
+			lblAWT->Text = "Average Waiting Time: " + avgTurnaroundTime.ToString();
+			lblCPU->Text = "CPU Utilization: " + cpuUtilization.ToString() + " %";
+
+			//space
+			lbDisplay->Items->Add(" ");
+			lbDisplay->Items->Add(" ");
+			lbDisplay->Items->Add(" ");
+
+			//data grid
+			// Assuming dtDisplay is your DataGridView control
+			dgDisplay->Rows->Clear();
+			dgDisplay->Columns->Clear();
+
+			// Add columns to the DataGridView
+			dgDisplay->Columns->Add("PID", "Process ID");
+			dgDisplay->Columns->Add("ArrivalTime", "Arrival Time");
+			dgDisplay->Columns->Add("BurstTime", "Burst Time");
+			dgDisplay->Columns->Add("CompletionTime", "Completion Time");
+			dgDisplay->Columns->Add("TurnaroundTime", "Turn Around Time");
+			dgDisplay->Columns->Add("WaitingTime", "Waiting Time");
+
+
+			// Display process information in DataGridView
+			for (const Process& p : processes) {
+				dgDisplay->Rows->Add(p.id, p.arrivalTime, p.burstTime, p.completionTime, p.turnaroundTime, p.waitingTime);
+			}
+
+		}
+
+		// NPP ALGO
+		else if (rbnpp->Checked) {
+			int numProcesses;
+			vector<Process> processes;
+			float avgTurnaroundTime;
+			float avgWaitingTime;
+			float avgResponseTime;
+			float cpuUtilization;
+			int totalTurnaroundTime = 0;
+			int totalWaitingTime = 0;
+			int totalResponseTime = 0;
+			int totalIdleTime = 0;
+			float throughput;
+			vector<int> isCompleted;
+			String^ tempBurstTime, ^ tempArrivalTime, ^ tempPriority;
+
+			tempArrivalTime = tbAT->Text;
+			string arrivalTimeStr = msclr::interop::marshal_as<std::string>(tempArrivalTime);
+			istringstream iss(arrivalTimeStr);
+
+			// Read arrival times and store them in the 'at' vector
+			vector<int> at;
+			char comma;  // Variable to store the comma
+			for (int number; iss >> number || (iss.eof() && at.empty());) {
+				at.push_back(number);
+
+				// Check for a comma and consume it if not at the end of the input
+				if (iss >> std::ws && iss.peek() == ',') {
+					iss.ignore();
+				}
+			}
+
+			// Input handling for burst times
+			tempBurstTime = tbBT->Text;
+			std::string burstTimeStr = msclr::interop::marshal_as<std::string>(tempBurstTime);
+			istringstream isss(burstTimeStr);
+
+			// Read burst times and store them in the 'bt' vector
+			vector<int> bt;
+			for (int number; isss >> number || (isss.eof() && bt.empty());) {
+				bt.push_back(number);
+
+				// Check for a comma and consume it if not at the end of the input
+				if (isss >> std::ws && isss.peek() == ',') {
+					isss.ignore();
+				}
+			}
+
+
+			// Input handling for priority
+			tempPriority = tbprio->Text;
+			std::string priorityStr = msclr::interop::marshal_as<std::string>(tempPriority);
+			istringstream issss(priorityStr);
+
+			// Read priority times and store them in the 'priority' vector
+			vector<int> priority;
+			for (int number; issss >> number || (issss.eof() && bt.empty());) {
+				priority.push_back(number);
+
+				// Check for a comma and consume it if not at the end of the input
+				if (issss >> std::ws && issss.peek() == ',') {
+					issss.ignore();
+				}
+			}
+
+			// Validation to check if the number of bt and at is the same, if not exit
+			if (priority.size() != bt.size()) {
+				MessageBox::Show("Invalid Input", "Warning", MessageBoxButtons::OK, MessageBoxIcon::Warning);
+				return;
+			}
+			// Initialize the number of processes
+			numProcesses = at.size();
+
+			// Store the values to the struct process
+			for (int i = 0; i < numProcesses; i++) {
+				Process process;
+				process.id = i + 1;  // Assign a unique id
+				process.arrivalTime = at[i];
+				process.burstTime = bt[i];
+				process.priority = priority[i];
+				processes.push_back(process);
+			}
+
+			isCompleted.resize(numProcesses, 0);  // Initialize isCompleted vector
+
+			int currentTime = 0;
+			int completed = 0;
+			int prev = 0;
+
+			// Calculate additional metrics
+			int minArrivalTime = 10000000;
+			int maxCompletionTime = -1;
+
+			// Schedule processes using Priority Scheduling
+			while (completed != numProcesses) {
+				int idx = -1;
+				int mx = 1000000000; // set mx to a high value
+
+				// Find the process with the highest priority that has arrived
+				for (int i = 0; i < numProcesses; i++) {
+					if (processes[i].arrivalTime <= currentTime && isCompleted[i] == 0) {
+						if (processes[i].priority < mx) {
 							mx = processes[i].priority;
 							idx = i;
 						}
+						if (processes[i].priority == mx) {
+							if (processes[i].arrivalTime < processes[idx].arrivalTime) {
+								mx = processes[i].priority;
+								idx = i;
+							}
+						}
+					}
+				}
+
+
+				// Execute the selected process
+				if (idx != -1) {
+					processes[idx].startTime = currentTime;
+					processes[idx].completionTime = processes[idx].startTime + processes[idx].burstTime;
+					processes[idx].turnaroundTime = processes[idx].completionTime - processes[idx].arrivalTime;
+					processes[idx].waitingTime = processes[idx].turnaroundTime - processes[idx].burstTime;
+					processes[idx].responseTime = processes[idx].startTime - processes[idx].arrivalTime;
+
+					maxCompletionTime = max(maxCompletionTime, processes[idx].completionTime);
+					minArrivalTime = min(minArrivalTime, processes[idx].arrivalTime);
+
+
+					totalTurnaroundTime += processes[idx].turnaroundTime;
+					totalWaitingTime += processes[idx].waitingTime;
+					totalResponseTime += processes[idx].responseTime;
+					totalIdleTime += processes[idx].startTime - prev;
+
+					isCompleted[idx] = 1;
+					completed++;
+					currentTime = processes[idx].completionTime;
+					prev = currentTime;
+				}
+				else {
+					currentTime++;
+				}
+			}
+
+
+			avgTurnaroundTime = static_cast<float>(totalTurnaroundTime) / numProcesses;
+			avgWaitingTime = static_cast<float>(totalWaitingTime) / numProcesses;
+			avgResponseTime = static_cast<float>(totalResponseTime) / numProcesses;
+			cpuUtilization = ((maxCompletionTime - totalIdleTime) / static_cast<float>(maxCompletionTime)) * 100;
+			throughput = static_cast<float>(numProcesses) / (maxCompletionTime - minArrivalTime);
+
+
+			// Display process information in tabular format
+			stdDetails = "{0, -15}{1, -22}{2, -22}{3, -26}{4, -26}{5, -26}{6, -26}";
+			lbDisplay->Items->Add(String::Format(stdDetails, " ", " ", " ", "                      Non Preemptive Priority", " ", " ", " "));
+			lbDisplay->Items->Add(" ");
+			lbDisplay->Items->Add(String::Format(stdDetails, "PID", "Arrival Time", "Burst Time", "Completion Time", "Turn Around Time", "Waiting Time", "Priority"));
+
+			for (const Process& p : processes) {
+				stdDetails = "{0, -25}{1, -30}{2, -30}{3, -33}{4, -33}{5, -33}{6, -33}";
+				lbDisplay->Items->Add(String::Format(stdDetails, p.id, p.arrivalTime, p.burstTime, p.completionTime, p.turnaroundTime, p.waitingTime, +p.priority));
+			}
+
+			lbDisplay->Items->Add(" ");
+
+			// for allignment
+			stdDetails = "{0, -15}{1, -25}{2, -25}{3, -25}{4, -25}{5, -25}{6, -25}";
+			lbDisplay->Items->Add(String::Format(stdDetails, " ", " ", "Average Waiting Time: ", avgWaitingTime, "Average Turn Around time:", avgTurnaroundTime, " "));
+
+			lbDisplay->Items->Add(" ");
+
+			lbDisplay->Items->Add(String::Format(stdDetails, " ", " ", " ", " ", "CPU Utilization: ", cpuUtilization, " %", " "));
+
+			//diplay average
+			lblATT->Text = "Average Turn Around Time: " + avgTurnaroundTime.ToString();
+			lblAWT->Text = "Average Waiting Time: " + avgTurnaroundTime.ToString();
+			lblCPU->Text = "CPU Utilization: " + cpuUtilization.ToString() + " %";
+
+			//space
+			lbDisplay->Items->Add(" ");
+			lbDisplay->Items->Add(" ");
+			lbDisplay->Items->Add(" ");
+
+			//data grid
+			// Assuming dtDisplay is your DataGridView control
+			dgDisplay->Rows->Clear();
+			dgDisplay->Columns->Clear();
+
+			// Add columns to the DataGridView
+			dgDisplay->Columns->Add("PID", "Process ID");
+			dgDisplay->Columns->Add("ArrivalTime", "Arrival Time");
+			dgDisplay->Columns->Add("BurstTime", "Burst Time");
+			dgDisplay->Columns->Add("Priority", "Priority");
+			dgDisplay->Columns->Add("CompletionTime", "Completion Time");
+			dgDisplay->Columns->Add("TurnaroundTime", "Turn Around Time");
+			dgDisplay->Columns->Add("WaitingTime", "Waiting Time");
+
+
+			// Display process information in DataGridView
+			for (const Process& p : processes) {
+				dgDisplay->Rows->Add(p.id, p.arrivalTime, p.burstTime, p.priority, p.completionTime, p.turnaroundTime, p.waitingTime);
+			}
+		}
+
+
+		// SRTF
+		else if (rbSRTF->Checked) {
+			int numProcesses;
+			vector<Process> processes;
+			float avgTurnaroundTime, avgWaitingTime, cpuUtilization;
+			int totalTurnaroundTime = 0, totalWaitingTime = 0, totalIdleTime = 0;
+			String^ tempBursttime, ^ tempArrivalTime;
+
+			// Input handling for arrival times
+			tempArrivalTime = tbAT->Text;
+			string arrivalTimeStr = msclr::interop::marshal_as<std::string>(tempArrivalTime);
+			istringstream iss(arrivalTimeStr);
+
+			// Read arrival times and store them in the 'at' vector
+			vector<int> at;
+			char comma;  // Variable to store the comma
+			for (int number; iss >> number || (iss.eof() && at.empty());) {
+				at.push_back(number);
+
+				// Check for a comma and consume it if not at the end of the input
+				if (iss >> std::ws && iss.peek() == ',') {
+					iss.ignore();
+				}
+			}
+
+			// Input handling for burst times
+			tempBursttime = tbBT->Text;
+			std::string burstTimeStr = msclr::interop::marshal_as<std::string>(tempBursttime);
+			istringstream isss(burstTimeStr);
+
+			// Read burst times and store them in the 'bt' vector
+			vector<int> bt;
+			for (int number; isss >> number || (isss.eof() && bt.empty());) {
+				bt.push_back(number);
+
+				// Check for a comma and consume it if not at the end of the input
+				if (isss >> std::ws && isss.peek() == ',') {
+					isss.ignore();
+				}
+			}
+
+			// Validation to check if the number of bt and at is the same, if not exit
+			if (at.size() != bt.size()) {
+				MessageBox::Show("Invalid Input", "Warning", MessageBoxButtons::OK, MessageBoxIcon::Warning);
+				return;
+			}
+
+			// Initialize the number of processes
+			numProcesses = at.size();
+
+			// Store the values to the struct process
+			for (int i = 0; i < numProcesses; i++) {
+				Process process;
+				process.id = i + 1;  // Assign a unique id
+				process.arrivalTime = at[i];
+				process.burstTime = bt[i];
+				process.remainingTime = process.burstTime;
+
+				processes.push_back(process);
+			}
+
+
+			// Sort processes by arrival time
+			sort(processes.begin(), processes.end(), sortByArrival);
+
+			int currentTime = 0;
+			int completedProcesses = 0;
+			vector<int> ganttChart;
+
+			while (completedProcesses < numProcesses) {
+				int shortestRemainingTime = INT_MAX;
+				int selectedProcess = -1;
+
+				for (int i = 0; i < numProcesses; ++i) {
+					if (processes[i].arrivalTime <= currentTime && processes[i].remainingTime > 0) {
+						if (processes[i].remainingTime < shortestRemainingTime) {
+							shortestRemainingTime = processes[i].remainingTime;
+							selectedProcess = i;
+						}
+					}
+				}
+
+				if (selectedProcess == -1) {
+					currentTime++;
+				}
+				else {
+					if (ganttChart.empty() || ganttChart.back() != processes[selectedProcess].id) {
+						ganttChart.push_back(processes[selectedProcess].id);
+					}
+
+					processes[selectedProcess].remainingTime--;
+					currentTime++;
+
+					if (processes[selectedProcess].remainingTime == 0) {
+						processes[selectedProcess].completionTime = currentTime;
+						processes[selectedProcess].turnaroundTime = processes[selectedProcess].completionTime - processes[selectedProcess].arrivalTime;
+						processes[selectedProcess].waitingTime = processes[selectedProcess].turnaroundTime - processes[selectedProcess].burstTime;
+
+						totalTurnaroundTime += processes[selectedProcess].turnaroundTime;
+						totalWaitingTime += processes[selectedProcess].waitingTime;
+
+						completedProcesses++;
 					}
 				}
 			}
 
-			
-			// Execute the selected process
-			if (idx != -1) {
-				processes[idx].startTime = currentTime;
-				processes[idx].completionTime = processes[idx].startTime + processes[idx].burstTime;
-				processes[idx].turnaroundTime = processes[idx].completionTime - processes[idx].arrivalTime;
-				processes[idx].waitingTime = processes[idx].turnaroundTime - processes[idx].burstTime;
-				processes[idx].responseTime = processes[idx].startTime - processes[idx].arrivalTime;
-
-				maxCompletionTime = max(maxCompletionTime, processes[idx].completionTime);
-				minArrivalTime = min(minArrivalTime, processes[idx].arrivalTime);
 
 
-				totalTurnaroundTime += processes[idx].turnaroundTime;
-				totalWaitingTime += processes[idx].waitingTime;
-				totalResponseTime += processes[idx].responseTime;
-				totalIdleTime += processes[idx].startTime - prev;
-
-				isCompleted[idx] = 1;
-				completed++;
-				currentTime = processes[idx].completionTime;
-				prev = currentTime;
+			// Calculate averages
+			avgTurnaroundTime = static_cast<float>(totalTurnaroundTime) / numProcesses;
+			avgWaitingTime = static_cast<float>(totalWaitingTime) / numProcesses;
+			int totalBurstTime = 0;
+			for (int burst : bt) {
+				totalBurstTime += burst;
 			}
-			else {
-				currentTime++;
+			cpuUtilization = (static_cast<float>(totalBurstTime) / currentTime) * 100;
+
+
+			// Sort processes by their original order
+
+			sort(processes.begin(), processes.end(), sortByOriginalOrder);
+
+			// Display process information in tabular format
+			stdDetails = "{0, -15}{1, -22}{2, -22}{3, -26}{4, -26}{5, -26}{6, -26}";
+			lbDisplay->Items->Add(String::Format(stdDetails, " ", " ", " ", "                      Shortest Remaining Time First", " ", " ", " "));
+			lbDisplay->Items->Add(" ");
+			lbDisplay->Items->Add(String::Format(stdDetails, "PID", "Arrival Time", "Burst Time", "Completion Time", "Turn Around Time", "Waiting Time", "Priority"));
+			for (const Process& p : processes) {
+				stdDetails = "{0, -25}{1, -30}{2, -30}{3, -33}{4, -33}{5, -33}{6, -33}";
+
+				lbDisplay->Items->Add(String::Format(stdDetails, p.id, p.arrivalTime, p.burstTime, p.completionTime, p.turnaroundTime, p.waitingTime, " "));
+
 			}
+			lbDisplay->Items->Add(" ");
+
+			// for allignment
+			stdDetails = "{0, -15}{1, -25}{2, -25}{3, -25}{4, -25}{5, -25}{6, -25}";
+			lbDisplay->Items->Add(String::Format(stdDetails, " ", " ", "Average Waiting Time: ", avgWaitingTime, "Average Turn Around time:", avgTurnaroundTime, " "));
+
+			lbDisplay->Items->Add(" ");
+			//diplay average
+			lbDisplay->Items->Add(String::Format(stdDetails, " ", " ", " ", " ", "CPU Utilization: ", cpuUtilization, " %", " "));
+			lblATT->Text = "Average Turn Around Time: " + avgTurnaroundTime.ToString();
+			lblAWT->Text = "Average Waiting Time: " + avgTurnaroundTime.ToString();
+			lblCPU->Text = "CPU Utilization: " + cpuUtilization.ToString() + " %";
+			//space
+			lbDisplay->Items->Add(" ");
+			lbDisplay->Items->Add(" ");
+			lbDisplay->Items->Add(" ");
+
+
+			//data grid
+	// Assuming dtDisplay is your DataGridView control
+			dgDisplay->Rows->Clear();
+			dgDisplay->Columns->Clear();
+
+			// Add columns to the DataGridView
+			dgDisplay->Columns->Add("PID", "Process ID");
+			dgDisplay->Columns->Add("ArrivalTime", "Arrival Time");
+			dgDisplay->Columns->Add("BurstTime", "Burst Time");
+			dgDisplay->Columns->Add("CompletionTime", "Completion Time");
+			dgDisplay->Columns->Add("TurnaroundTime", "Turn Around Time");
+			dgDisplay->Columns->Add("WaitingTime", "Waiting Time");
+
+
+			// Display process information in DataGridView
+			for (const Process& p : processes) {
+				dgDisplay->Rows->Add(p.id, p.arrivalTime, p.burstTime, p.completionTime, p.turnaroundTime, p.waitingTime);
+			}
+		};
+	}
+	private: System::Void rbFCFS_CheckedChanged(System::Object^ sender, System::EventArgs^ e) {
+		//hide the textbok and text if the algo is not npp
+		this->tbprio->Visible = !this->rbFCFS->Checked;
+		if (rbFCFS->Checked) {
+			lblPrio->Text = "";
+			lblAlgo->Text = "First Come First Serve";
+			this->lbDisplay->Size = System::Drawing::Size(553, 225);
+			this->btnCompute->Location = System::Drawing::Point(72, 223);
 		}
-
-
-		avgTurnaroundTime = static_cast<float>(totalTurnaroundTime) / numProcesses;
-		avgWaitingTime = static_cast<float>(totalWaitingTime) / numProcesses;
-		avgResponseTime = static_cast<float>(totalResponseTime) / numProcesses;
-		cpuUtilization = ((maxCompletionTime - totalIdleTime) / static_cast<float>(maxCompletionTime)) * 100;
-		throughput = static_cast<float>(numProcesses) / (maxCompletionTime - minArrivalTime);
-
-
-		// Display process information in tabular format
-		stdDetails = "{0, -15}{1, -22}{2, -22}{3, -26}{4, -26}{5, -26}{6, -26}";
-		lbDisplay->Items->Add(String::Format(stdDetails, " ", " ", " ", "                      Non Preemptive Priority", " ", " ", " "));
-		lbDisplay->Items->Add(" ");
-		lbDisplay->Items->Add(String::Format(stdDetails, "PID", "Arrival Time", "Burst Time", "Completion Time", "Turn Around Time", "Waiting Time", "Priority"));
-
-		for (const Process& p : processes) {
-			stdDetails = "{0, -25}{1, -30}{2, -30}{3, -33}{4, -33}{5, -33}{6, -33}";
-			lbDisplay->Items->Add(String::Format(stdDetails, p.id, p.arrivalTime, p.burstTime, p.completionTime, p.turnaroundTime, p.waitingTime,  + p.priority));
-		}
-
-		lbDisplay->Items->Add(" ");
-
-		// for allignment
-		stdDetails = "{0, -15}{1, -25}{2, -25}{3, -25}{4, -25}{5, -25}{6, -25}";
-		lbDisplay->Items->Add(String::Format(stdDetails, " ", " ", "Average Waiting Time: ", avgWaitingTime, "Average Turn Around time:", avgTurnaroundTime, " "));
-
-		lbDisplay->Items->Add(" ");
-
-		lbDisplay->Items->Add(String::Format(stdDetails, " ", " ", " ", " ", "CPU Utilization: ", cpuUtilization, " %", " "));
-
-		//diplay average
-		lblATT->Text = "Average Turn Around Time: " + avgTurnaroundTime.ToString();
-		lblAWT->Text = "Average Waiting Time: " + avgTurnaroundTime.ToString();
-		lblCPU->Text = "CPU Utilization: " + cpuUtilization.ToString() + " %";
-
-		//space
-		lbDisplay->Items->Add(" ");
-		lbDisplay->Items->Add(" ");
-		lbDisplay->Items->Add(" ");
-
-		//data grid
-		// Assuming dtDisplay is your DataGridView control
-		dgDisplay->Rows->Clear();
-		dgDisplay->Columns->Clear();
-
-		// Add columns to the DataGridView
-		dgDisplay->Columns->Add("PID", "Process ID");
-		dgDisplay->Columns->Add("ArrivalTime", "Arrival Time");
-		dgDisplay->Columns->Add("BurstTime", "Burst Time");
-		dgDisplay->Columns->Add("Priority", "Priority");
-		dgDisplay->Columns->Add("CompletionTime", "Completion Time");
-		dgDisplay->Columns->Add("TurnaroundTime", "Turn Around Time");
-		dgDisplay->Columns->Add("WaitingTime", "Waiting Time");
-
-
-		// Display process information in DataGridView
-		for (const Process& p : processes) {
-			dgDisplay->Rows->Add(p.id, p.arrivalTime, p.burstTime, p.priority, p.completionTime, p.turnaroundTime, p.waitingTime);
+		else {
+			lblPrio->Text = "Priority";
+			this->lbDisplay->Size = System::Drawing::Size(630, 225);
 		}
 	}
 
 
-	// SRTF
-	else if (rbSRTF->Checked) {
-		int numProcesses;
-		vector<Process> processes;
-		float avgTurnaroundTime, avgWaitingTime, cpuUtilization;
-		int totalTurnaroundTime = 0, totalWaitingTime = 0, totalIdleTime = 0;
-		String^ tempBursttime,^ tempArrivalTime;
-
-		// Input handling for arrival times
-		tempArrivalTime = tbAT->Text;
-		string arrivalTimeStr = msclr::interop::marshal_as<std::string>(tempArrivalTime);
-		istringstream iss(arrivalTimeStr);
-
-		// Read arrival times and store them in the 'at' vector
-		vector<int> at;
-		char comma;  // Variable to store the comma
-		for (int number; iss >> number || (iss.eof() && at.empty());) {
-			at.push_back(number);
-
-			// Check for a comma and consume it if not at the end of the input
-			if (iss >> std::ws && iss.peek() == ',') {
-				iss.ignore();
-			}
-		}
-
-		// Input handling for burst times
-		tempBursttime = tbBT->Text;
-		std::string burstTimeStr = msclr::interop::marshal_as<std::string>(tempBursttime);
-		istringstream isss(burstTimeStr);
-
-		// Read burst times and store them in the 'bt' vector
-		vector<int> bt;
-		for (int number; isss >> number || (isss.eof() && bt.empty());) {
-			bt.push_back(number);
-
-			// Check for a comma and consume it if not at the end of the input
-			if (isss >> std::ws && isss.peek() == ',') {
-				isss.ignore();
-			}
-		}
-
-		// Validation to check if the number of bt and at is the same, if not exit
-		if (at.size() != bt.size()) {
-			MessageBox::Show("Invalid Input", "Warning", MessageBoxButtons::OK, MessageBoxIcon::Warning);
-			return;
-		}
-		
-		// Initialize the number of processes
-		numProcesses = at.size();
-
-		// Store the values to the struct process
-		for (int i = 0; i < numProcesses; i++) {
-			Process process;
-			process.id = i + 1;  // Assign a unique id
-			process.arrivalTime = at[i];
-			process.burstTime = bt[i];
-			process.remainingTime = process.burstTime;
-
-			processes.push_back(process);
-		}
-
-
-		// Sort processes by arrival time
-		sort(processes.begin(), processes.end(), sortByArrival);
-
-		int currentTime = 0;
-		int completedProcesses = 0;
-		vector<int> ganttChart;
-
-		while (completedProcesses < numProcesses) {
-			int shortestRemainingTime = INT_MAX;
-			int selectedProcess = -1;
-
-			for (int i = 0; i < numProcesses; ++i) {
-				if (processes[i].arrivalTime <= currentTime && processes[i].remainingTime > 0) {
-					if (processes[i].remainingTime < shortestRemainingTime) {
-						shortestRemainingTime = processes[i].remainingTime;
-						selectedProcess = i;
-					}
-				}
-			}
-
-			if (selectedProcess == -1) {
-				currentTime++;
-			}
-			else {
-				if (ganttChart.empty() || ganttChart.back() != processes[selectedProcess].id) {
-					ganttChart.push_back(processes[selectedProcess].id);
-				}
-
-				processes[selectedProcess].remainingTime--;
-				currentTime++;
-
-				if (processes[selectedProcess].remainingTime == 0) {
-					processes[selectedProcess].completionTime = currentTime;
-					processes[selectedProcess].turnaroundTime = processes[selectedProcess].completionTime - processes[selectedProcess].arrivalTime;
-					processes[selectedProcess].waitingTime = processes[selectedProcess].turnaroundTime - processes[selectedProcess].burstTime;
-
-					totalTurnaroundTime += processes[selectedProcess].turnaroundTime;
-					totalWaitingTime += processes[selectedProcess].waitingTime;
-
-					completedProcesses++;
-				}
-			}
-		}
-
-
-
-		// Calculate averages
-		avgTurnaroundTime = static_cast<float>(totalTurnaroundTime) / numProcesses;
-		avgWaitingTime = static_cast<float>(totalWaitingTime) / numProcesses;
-		int totalBurstTime = 0;
-		for (int burst : bt) {
-			totalBurstTime += burst;
-		}
-		cpuUtilization = (static_cast<float>(totalBurstTime) / currentTime) * 100;
-
-		
-		// Sort processes by their original order
-
-		sort(processes.begin(), processes.end(), sortByOriginalOrder);
-		
-		// Display process information in tabular format
-		stdDetails = "{0, -15}{1, -22}{2, -22}{3, -26}{4, -26}{5, -26}{6, -26}";
-		lbDisplay->Items->Add(String::Format(stdDetails, " ", " ", " ", "                      Shortest Remaining Time First", " ", " ", " "));
-		lbDisplay->Items->Add(" ");
-		lbDisplay->Items->Add(String::Format(stdDetails, "PID", "Arrival Time", "Burst Time", "Completion Time", "Turn Around Time", "Waiting Time", "Priority"));
-		for (const Process& p : processes) {
-			stdDetails = "{0, -25}{1, -30}{2, -30}{3, -33}{4, -33}{5, -33}{6, -33}";
-
-			lbDisplay->Items->Add(String::Format(stdDetails, p.id, p.arrivalTime, p.burstTime, p.completionTime, p.turnaroundTime, p.waitingTime, " "));
+	private: System::Void rbnpp_CheckedChanged(System::Object^ sender, System::EventArgs^ e) {
+		if (rbnpp->Checked) {
+			this->lbDisplay->Size = System::Drawing::Size(630, 225);
+			lblAlgo->Text = "Non Preemptive Priority";
+			this->btnCompute->Location = System::Drawing::Point(75, 283);
 
 		}
-		lbDisplay->Items->Add(" ");
-
-		// for allignment
-		stdDetails = "{0, -15}{1, -25}{2, -25}{3, -25}{4, -25}{5, -25}{6, -25}";
-		lbDisplay->Items->Add(String::Format(stdDetails, " ", " ", "Average Waiting Time: ", avgWaitingTime, "Average Turn Around time:", avgTurnaroundTime, " "));
-
-		lbDisplay->Items->Add(" ");
-		//diplay average
-		lbDisplay->Items->Add(String::Format(stdDetails, " ", " ", " ", " ", "CPU Utilization: ", cpuUtilization, " %", " "));
-		lblATT->Text = "Average Turn Around Time: " + avgTurnaroundTime.ToString();
-		lblAWT->Text = "Average Waiting Time: " + avgTurnaroundTime.ToString();
-		lblCPU->Text = "CPU Utilization: " + cpuUtilization.ToString() + " %";
-		//space
-		lbDisplay->Items->Add(" ");
-		lbDisplay->Items->Add(" ");
-		lbDisplay->Items->Add(" ");
-
-
-		//data grid
-// Assuming dtDisplay is your DataGridView control
-		dgDisplay->Rows->Clear();
-		dgDisplay->Columns->Clear();
-
-		// Add columns to the DataGridView
-		dgDisplay->Columns->Add("PID", "Process ID");
-		dgDisplay->Columns->Add("ArrivalTime", "Arrival Time");
-		dgDisplay->Columns->Add("BurstTime", "Burst Time");
-		dgDisplay->Columns->Add("CompletionTime", "Completion Time");
-		dgDisplay->Columns->Add("TurnaroundTime", "Turn Around Time");
-		dgDisplay->Columns->Add("WaitingTime", "Waiting Time");
-
-
-		// Display process information in DataGridView
-		for (const Process& p : processes) {
-			dgDisplay->Rows->Add(p.id, p.arrivalTime, p.burstTime, p.completionTime, p.turnaroundTime, p.waitingTime);
+		else this->lbDisplay->Size = System::Drawing::Size(553, 225);
+	}
+	private: System::Void rbSRTF_CheckedChanged(System::Object^ sender, System::EventArgs^ e) {
+		//hide the textbok and text if the algo is not npp
+		this->tbprio->Visible = !this->rbSRTF->Checked;
+		if (rbSRTF->Checked) {
+			lblPrio->Text = "";
+			this->lbDisplay->Size = System::Drawing::Size(553, 225);
+			this->btnCompute->Location = System::Drawing::Point(72, 223);
+			lblAlgo->Text = "Shortest Remaining Time First";
 		}
+
+		else {
+			lblPrio->Text = "Priority";
+			this->lbDisplay->Size = System::Drawing::Size(630, 225);
+		}
+	}
+
+
+	private: System::Void tbprio_TextChanged(System::Object^ sender, System::EventArgs^ e) {
+	}
+	private: System::Void lbDisplay_SelectedIndexChanged(System::Object^ sender, System::EventArgs^ e) {
+
+	}
+	private: System::Void lbDisplay_SelectedIndexChanged_1(System::Object^ sender, System::EventArgs^ e) {
+	}
+		   //clear History
+	private: System::Void btnClear_Click(System::Object^ sender, System::EventArgs^ e) {
+		lbDisplay->Items->Clear();
+	}
+
+	private: System::Void dgDisplay_CellContentClick(System::Object^ sender, System::Windows::Forms::DataGridViewCellEventArgs^ e) {
+	}
+	private: System::Void gbAlgo_Enter(System::Object^ sender, System::EventArgs^ e) {
+	}
+	private: System::Void lblATT_Click(System::Object^ sender, System::EventArgs^ e) {
+	}
+	private: System::Void lblAlgo_Click(System::Object^ sender, System::EventArgs^ e) {
+	}
+	private: System::Void lblDisp_Click(System::Object^ sender, System::EventArgs^ e) {
+	}
+	private: System::Void lblCPU_Click(System::Object^ sender, System::EventArgs^ e) {
+	}
+	private: System::Void creditToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
+		//
+		// For User Manual
+		//
+		MessageBox::Show("This Shows The User Manual", "User Manual", MessageBoxButtons::OK, MessageBoxIcon::Information);
+
+	}
+	private: System::Void menuStrip1_ItemClicked(System::Object^ sender, System::Windows::Forms::ToolStripItemClickedEventArgs^ e) {
+	}
+	private: System::Void lblPrio_Click(System::Object^ sender, System::EventArgs^ e) {
+	}
+	private: System::Void tbBT_TextChanged(System::Object^ sender, System::EventArgs^ e) {
+	}
+	private: System::Void lblBT_Click(System::Object^ sender, System::EventArgs^ e) {
+	}
+	private: System::Void tbAT_TextChanged(System::Object^ sender, System::EventArgs^ e) {
+	}
+	private: System::Void lblAT_Click(System::Object^ sender, System::EventArgs^ e) {
+	}
+	private: System::Void aboutToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
+	}
+	private: System::Void creditsToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
+		//
+		// For Credits (Authors)
+		//
+		MessageBox::Show("Created by BSIT 2-1 A.Y. 2023\n\nLead Programmer:\nJan Leo B. Egamen\n\nBackend Developers: \nEmma Marie S. Hechanova \nMa. Ellyza R. Teñiero \n\nFrontend Developer: \nAlec Godwin C. Almirañez \n\nTechnical Writer: \nVince Gabriel G. Razon ", "Authors", MessageBoxButtons::OK, MessageBoxIcon::Information
+		);
+	}
+
 	};
-}
-private: System::Void rbFCFS_CheckedChanged(System::Object^ sender, System::EventArgs^ e) {
-	//hide the textbok and text if the algo is not npp
-	this->tbprio->Visible = !this->rbFCFS->Checked;
-	if (rbFCFS->Checked) { lblPrio->Text = "";
-	lblAlgo->Text = "First Come First Serve";
-		this->lbDisplay->Size = System::Drawing::Size(553, 225);
-	this->btnCompute->Location = System::Drawing::Point(80, 197);
-	}
-	else {
-		lblPrio->Text = "Priority";
-		this->lbDisplay->Size = System::Drawing::Size(630, 225);
-	}
-}
-
-
-private: System::Void rbnpp_CheckedChanged(System::Object^ sender, System::EventArgs^ e) {
-	if (rbnpp->Checked) {
-		this->lbDisplay->Size = System::Drawing::Size(630, 225);
-		lblAlgo->Text = "Non Preemptive Priority";
-		this->btnCompute->Location = System::Drawing::Point(80, 241);
-		
-	}
-	else this->lbDisplay->Size = System::Drawing::Size(553, 225);
-}
-private: System::Void rbSRTF_CheckedChanged(System::Object^ sender, System::EventArgs^ e) {
-	//hide the textbok and text if the algo is not npp
-	this->tbprio->Visible = !this->rbSRTF->Checked;
-	if (rbSRTF->Checked) {
-		lblPrio->Text = "";
-		this->lbDisplay->Size = System::Drawing::Size(553, 225);
-		this->btnCompute->Location = System::Drawing::Point(80, 197);
-		lblAlgo->Text = "Shortest Remaining Time First";
-	}
-
-	else {
-		lblPrio->Text = "Priority";
-		this->lbDisplay->Size = System::Drawing::Size(630, 225);
-	}
-}
-
-
-private: System::Void tbprio_TextChanged(System::Object^ sender, System::EventArgs^ e) {
-}
-private: System::Void lbDisplay_SelectedIndexChanged(System::Object^ sender, System::EventArgs^ e) {
-	
-}
-private: System::Void lbDisplay_SelectedIndexChanged_1(System::Object^ sender, System::EventArgs^ e) {
-}
-	   //clear History
-private: System::Void btnClear_Click(System::Object^ sender, System::EventArgs^ e) {
-	lbDisplay->Items->Clear();
-}
-
-private: System::Void dgDisplay_CellContentClick(System::Object^ sender, System::Windows::Forms::DataGridViewCellEventArgs^ e) {
-}
-private: System::Void gbAlgo_Enter(System::Object^ sender, System::EventArgs^ e) {
-}
-private: System::Void lblATT_Click(System::Object^ sender, System::EventArgs^ e) {
-}
-private: System::Void lblAlgo_Click(System::Object^ sender, System::EventArgs^ e) {
-}
-private: System::Void lblDisp_Click(System::Object^ sender, System::EventArgs^ e) {
-}
-private: System::Void lblCPU_Click(System::Object^ sender, System::EventArgs^ e) {
-}
-private: System::Void creditToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
-	//
-	// For User Manual
-	//
-	MessageBox::Show("This Shows The User Manual","User Manual",MessageBoxButtons:: OK ,MessageBoxIcon::Information);
-
-}
-private: System::Void menuStrip1_ItemClicked(System::Object^ sender, System::Windows::Forms::ToolStripItemClickedEventArgs^ e) {
-}
-private: System::Void lblPrio_Click(System::Object^ sender, System::EventArgs^ e) {
-}
-private: System::Void tbBT_TextChanged(System::Object^ sender, System::EventArgs^ e) {
-}
-private: System::Void lblBT_Click(System::Object^ sender, System::EventArgs^ e) {
-}
-private: System::Void tbAT_TextChanged(System::Object^ sender, System::EventArgs^ e) {
-}
-private: System::Void lblAT_Click(System::Object^ sender, System::EventArgs^ e) {
-}
-private: System::Void aboutToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
-}
-private: System::Void creditsToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
-	//
-	// For Credits (Authors)
-	//
-	MessageBox::Show("Created by BSIT 2-1 A.Y. 2023\n\nLead Programmer:\nJan Leo B. Egamen\n\nBackend Developers: \nEmma Marie S. Hechanova \nMa. Ellyza R. Teñiero \n\nFrontend Developer: \nAlec Godwin C. Almirañez \n\nTechnical Writer: \nVince Gabriel G. Razon ","Authors", MessageBoxButtons:: OK, MessageBoxIcon::Information
-	);
-}
-
-};
 }
