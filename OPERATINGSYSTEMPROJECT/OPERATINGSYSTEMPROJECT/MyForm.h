@@ -509,6 +509,13 @@ namespace OPERATINGSYSTEMPROJECT {
 
 			// Input handling for arrival times
 			tempArrivalTime = tbAT->Text;
+
+			// Input handling for arrival times
+			if (tempArrivalTime == "") {
+				MessageBox::Show("Arrival time cannot be empty.", "Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
+				return;
+			}
+
 			string arrivalTimeStr = msclr::interop::marshal_as<std::string>(tempArrivalTime);
 			istringstream iss(arrivalTimeStr);
 
@@ -526,6 +533,12 @@ namespace OPERATINGSYSTEMPROJECT {
 
 			// Input handling for burst times
 			tempBurstTime = tbBT->Text;
+			// Input handling for burst times
+			if (tempBurstTime == "") {
+				MessageBox::Show("Burst time cannot be empty.", "Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
+				return;
+			}
+
 			std::string burstTimeStr = msclr::interop::marshal_as<std::string>(tempBurstTime);
 			istringstream isss(burstTimeStr);
 
@@ -587,14 +600,14 @@ namespace OPERATINGSYSTEMPROJECT {
 			sort(processes.begin(), processes.end(), compareID);
 
 			// Display process information in tabular format
-			stdDetails = "{0, -15}{1, -22}{2, -22}{3, -26}{4, -26}{5, -26}{6, -26}";
+			stdDetails = "{0, -15}{1, -22}{2, -22}{3, -26}{4, -26}{5, -26}";
 			lbDisplay->Items->Add(String::Format(stdDetails, " ", " ", " ", "                      First Come First Serve", " ", " ", " "));
 			lbDisplay->Items->Add(" ");
-			lbDisplay->Items->Add(String::Format(stdDetails, "PID", "Arrival Time", "Burst Time", "Completion Time", "Turn Around Time", "Waiting Time", "Priority"));
+			lbDisplay->Items->Add(String::Format(stdDetails, "PID", "Arrival Time", "Burst Time", "Completion Time", "Turn Around Time", "Waiting Time"));
 
 			for (const Process& p : processes) {
-				stdDetails = "{0, -25}{1, -30}{2, -30}{3, -33}{4, -33}{5, -33}{6, -33}";
-				lbDisplay->Items->Add(String::Format(stdDetails, p.id, p.arrivalTime, p.burstTime, p.completionTime, p.turnaroundTime, p.waitingTime, " "));
+				stdDetails = "{0, -25}{1, -30}{2, -30}{3, -33}{4, -33}{5, -33}";
+				lbDisplay->Items->Add(String::Format(stdDetails, p.id, p.arrivalTime, p.burstTime, p.completionTime, p.turnaroundTime, p.waitingTime));
 
 			}
 			lbDisplay->Items->Add(" ");
@@ -605,12 +618,12 @@ namespace OPERATINGSYSTEMPROJECT {
 
 			lbDisplay->Items->Add(" ");
 
-			lbDisplay->Items->Add(String::Format(stdDetails, " ", " ", " ", " ", "CPU Utilization: ", cpuUtilization, " %", " "));
+			lbDisplay->Items->Add(String::Format(stdDetails, " ", " ", " ", " ", "CPU Utilization: ", cpuUtilization + " %", "", " "));
 
 			//diplay average
-			lblATT->Text = "Average Turn Around Time: " + avgTurnaroundTime.ToString();
-			lblAWT->Text = "Average Waiting Time: " + avgTurnaroundTime.ToString();
-			lblCPU->Text = "CPU Utilization: " + cpuUtilization.ToString() + " %";
+			lblATT->Text = "Average Turn Around Time: " + avgTurnaroundTime.ToString("0.00");
+			lblAWT->Text = "Average Waiting Time: " + avgTurnaroundTime.ToString("0.00");
+			lblCPU->Text = "CPU Utilization: " + cpuUtilization.ToString("0.00") + " %";
 
 			//space
 			lbDisplay->Items->Add(" ");
@@ -655,6 +668,12 @@ namespace OPERATINGSYSTEMPROJECT {
 			String^ tempBurstTime, ^ tempArrivalTime, ^ tempPriority;
 
 			tempArrivalTime = tbAT->Text;
+			// Input handling for arrival times
+			if (tempArrivalTime == "") {
+				MessageBox::Show("Arrival time cannot be empty.", "Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
+				return;
+			}
+
 			string arrivalTimeStr = msclr::interop::marshal_as<std::string>(tempArrivalTime);
 			istringstream iss(arrivalTimeStr);
 
@@ -672,6 +691,12 @@ namespace OPERATINGSYSTEMPROJECT {
 
 			// Input handling for burst times
 			tempBurstTime = tbBT->Text;
+			// Input handling for burst times
+			if (tempBurstTime == "") {
+				MessageBox::Show("Burst time cannot be empty.", "Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
+				return;
+			}
+
 			std::string burstTimeStr = msclr::interop::marshal_as<std::string>(tempBurstTime);
 			istringstream isss(burstTimeStr);
 
@@ -689,6 +714,11 @@ namespace OPERATINGSYSTEMPROJECT {
 
 			// Input handling for priority
 			tempPriority = tbprio->Text;
+			if (tempPriority == "") {
+				MessageBox::Show("Priority time cannot be empty.", "Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
+				return;
+			}
+
 			std::string priorityStr = msclr::interop::marshal_as<std::string>(tempPriority);
 			istringstream issss(priorityStr);
 
@@ -807,12 +837,12 @@ namespace OPERATINGSYSTEMPROJECT {
 
 			lbDisplay->Items->Add(" ");
 
-			lbDisplay->Items->Add(String::Format(stdDetails, " ", " ", " ", " ", "CPU Utilization: ", cpuUtilization, " %", " "));
+			lbDisplay->Items->Add(String::Format(stdDetails, " ", " ", " ", " ", "CPU Utilization: ", cpuUtilization + " %", " ", " "));
 
 			//diplay average
-			lblATT->Text = "Average Turn Around Time: " + avgTurnaroundTime.ToString();
-			lblAWT->Text = "Average Waiting Time: " + avgTurnaroundTime.ToString();
-			lblCPU->Text = "CPU Utilization: " + cpuUtilization.ToString() + " %";
+			lblATT->Text = "Average Turn Around Time: " + avgTurnaroundTime.ToString("0.00");
+			lblAWT->Text = "Average Waiting Time: " + avgTurnaroundTime.ToString("0.00");
+			lblCPU->Text = "CPU Utilization: " + cpuUtilization.ToString("0.00") + " %";
 
 			//space
 			lbDisplay->Items->Add(" ");
@@ -851,6 +881,11 @@ namespace OPERATINGSYSTEMPROJECT {
 
 			// Input handling for arrival times
 			tempArrivalTime = tbAT->Text;
+			if (tempArrivalTime == "") {
+				MessageBox::Show("Arrival time cannot be empty.", "Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
+				return;
+			}
+
 			string arrivalTimeStr = msclr::interop::marshal_as<std::string>(tempArrivalTime);
 			istringstream iss(arrivalTimeStr);
 
@@ -868,6 +903,11 @@ namespace OPERATINGSYSTEMPROJECT {
 
 			// Input handling for burst times
 			tempBursttime = tbBT->Text;
+			if (tempBursttime == "") {
+				MessageBox::Show("Burst time cannot be empty.", "Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
+				return;
+			}
+
 			std::string burstTimeStr = msclr::interop::marshal_as<std::string>(tempBursttime);
 			istringstream isss(burstTimeStr);
 
@@ -964,12 +1004,12 @@ namespace OPERATINGSYSTEMPROJECT {
 			sort(processes.begin(), processes.end(), sortByOriginalOrder);
 
 			// Display process information in tabular format
-			stdDetails = "{0, -15}{1, -22}{2, -22}{3, -26}{4, -26}{5, -26}{6, -26}";
-			lbDisplay->Items->Add(String::Format(stdDetails, " ", " ", " ", "                      Shortest Remaining Time First", " ", " ", " "));
+			stdDetails = "{0, -15}{1, -22}{2, -22}{3, -26}{4, -26}{5, -26}";
+			lbDisplay->Items->Add(String::Format(stdDetails, " ", " ", " ", "                      Shortest Remaining Time First", " ", " "));
 			lbDisplay->Items->Add(" ");
-			lbDisplay->Items->Add(String::Format(stdDetails, "PID", "Arrival Time", "Burst Time", "Completion Time", "Turn Around Time", "Waiting Time", "Priority"));
+			lbDisplay->Items->Add(String::Format(stdDetails, "PID", "Arrival Time", "Burst Time", "Completion Time", "Turn Around Time", "Waiting Time"));
 			for (const Process& p : processes) {
-				stdDetails = "{0, -25}{1, -30}{2, -30}{3, -33}{4, -33}{5, -33}{6, -33}";
+				stdDetails = "{0, -25}{1, -30}{2, -30}{3, -33}{4, -33}{5, -33}";
 
 				lbDisplay->Items->Add(String::Format(stdDetails, p.id, p.arrivalTime, p.burstTime, p.completionTime, p.turnaroundTime, p.waitingTime, " "));
 
@@ -982,10 +1022,10 @@ namespace OPERATINGSYSTEMPROJECT {
 
 			lbDisplay->Items->Add(" ");
 			//diplay average
-			lbDisplay->Items->Add(String::Format(stdDetails, " ", " ", " ", " ", "CPU Utilization: ", cpuUtilization, " %", " "));
-			lblATT->Text = "Average Turn Around Time: " + avgTurnaroundTime.ToString();
-			lblAWT->Text = "Average Waiting Time: " + avgTurnaroundTime.ToString();
-			lblCPU->Text = "CPU Utilization: " + cpuUtilization.ToString() + " %";
+			lbDisplay->Items->Add(String::Format(stdDetails, " ", " ", " ", " ", "CPU Utilization: ", cpuUtilization  + " %", " ", " "));
+			lblATT->Text = "Average Turn Around Time: " + avgTurnaroundTime.ToString("0.00");
+			lblAWT->Text = "Average Waiting Time: " + avgTurnaroundTime.ToString("0.00");
+			lblCPU->Text = "CPU Utilization: " + cpuUtilization.ToString("0.00") + " %";
 			//space
 			lbDisplay->Items->Add(" ");
 			lbDisplay->Items->Add(" ");
@@ -1018,19 +1058,16 @@ namespace OPERATINGSYSTEMPROJECT {
 		if (rbFCFS->Checked) {
 			lblPrio->Text = "";
 			lblAlgo->Text = "First Come First Serve";
-			this->lbDisplay->Size = System::Drawing::Size(553, 225);
 			this->btnCompute->Location = System::Drawing::Point(72, 223);
 		}
 		else {
 			lblPrio->Text = "Priority";
-			this->lbDisplay->Size = System::Drawing::Size(630, 225);
 		}
 	}
 
 
 	private: System::Void rbnpp_CheckedChanged(System::Object^ sender, System::EventArgs^ e) {
 		if (rbnpp->Checked) {
-			this->lbDisplay->Size = System::Drawing::Size(630, 225);
 			lblAlgo->Text = "Non Preemptive Priority";
 			this->btnCompute->Location = System::Drawing::Point(75, 283);
 
@@ -1042,14 +1079,12 @@ namespace OPERATINGSYSTEMPROJECT {
 		this->tbprio->Visible = !this->rbSRTF->Checked;
 		if (rbSRTF->Checked) {
 			lblPrio->Text = "";
-			this->lbDisplay->Size = System::Drawing::Size(553, 225);
 			this->btnCompute->Location = System::Drawing::Point(72, 223);
 			lblAlgo->Text = "Shortest Remaining Time First";
 		}
 
 		else {
 			lblPrio->Text = "Priority";
-			this->lbDisplay->Size = System::Drawing::Size(630, 225);
 		}
 	}
 
