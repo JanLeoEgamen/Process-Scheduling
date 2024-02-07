@@ -120,6 +120,9 @@ namespace OPERATINGSYSTEMPROJECT {
 	private: System::Windows::Forms::ToolStripMenuItem^ creditToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^ creditsToolStripMenuItem;
 	private: System::Windows::Forms::TextBox^ tbBT;
+	private: System::Windows::Forms::ListBox^ lbGanttChart;
+
+	private: System::Windows::Forms::Label^ lblRunTime;
 
 
 
@@ -166,6 +169,8 @@ namespace OPERATINGSYSTEMPROJECT {
 			this->creditToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->creditsToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->tbBT = (gcnew System::Windows::Forms::TextBox());
+			this->lbGanttChart = (gcnew System::Windows::Forms::ListBox());
+			this->lblRunTime = (gcnew System::Windows::Forms::Label());
 			this->gbAlgo->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dgDisplay))->BeginInit();
 			this->menuStrip1->SuspendLayout();
@@ -232,9 +237,9 @@ namespace OPERATINGSYSTEMPROJECT {
 			// 
 			this->lbDisplay->BackColor = System::Drawing::Color::White;
 			this->lbDisplay->FormattingEnabled = true;
-			this->lbDisplay->Location = System::Drawing::Point(239, 382);
+			this->lbDisplay->Location = System::Drawing::Point(239, 408);
 			this->lbDisplay->Name = L"lbDisplay";
-			this->lbDisplay->Size = System::Drawing::Size(627, 225);
+			this->lbDisplay->Size = System::Drawing::Size(627, 199);
 			this->lbDisplay->TabIndex = 6;
 			this->lbDisplay->SelectedIndexChanged += gcnew System::EventHandler(this, &MyForm::lbDisplay_SelectedIndexChanged_1);
 			// 
@@ -345,7 +350,7 @@ namespace OPERATINGSYSTEMPROJECT {
 			// 
 			this->lblHistory->AutoSize = true;
 			this->lblHistory->Font = (gcnew System::Drawing::Font(L"Lucida Bright", 20.25F));
-			this->lblHistory->Location = System::Drawing::Point(233, 342);
+			this->lblHistory->Location = System::Drawing::Point(233, 369);
 			this->lblHistory->Name = L"lblHistory";
 			this->lblHistory->Size = System::Drawing::Size(111, 32);
 			this->lblHistory->TabIndex = 10;
@@ -356,7 +361,7 @@ namespace OPERATINGSYSTEMPROJECT {
 			this->lblATT->AutoSize = true;
 			this->lblATT->Font = (gcnew System::Drawing::Font(L"Yu Gothic UI", 8.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->lblATT->Location = System::Drawing::Point(390, 325);
+			this->lblATT->Location = System::Drawing::Point(264, 318);
 			this->lblATT->Name = L"lblATT";
 			this->lblATT->Size = System::Drawing::Size(141, 13);
 			this->lblATT->TabIndex = 11;
@@ -368,7 +373,7 @@ namespace OPERATINGSYSTEMPROJECT {
 			this->lblAWT->AutoSize = true;
 			this->lblAWT->Font = (gcnew System::Drawing::Font(L"Yu Gothic UI", 8.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->lblAWT->Location = System::Drawing::Point(390, 348);
+			this->lblAWT->Location = System::Drawing::Point(264, 341);
 			this->lblAWT->Name = L"lblAWT";
 			this->lblAWT->Size = System::Drawing::Size(120, 13);
 			this->lblAWT->TabIndex = 12;
@@ -379,7 +384,7 @@ namespace OPERATINGSYSTEMPROJECT {
 			this->lblCPU->AutoSize = true;
 			this->lblCPU->Font = (gcnew System::Drawing::Font(L"Yu Gothic UI", 8.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->lblCPU->Location = System::Drawing::Point(690, 325);
+			this->lblCPU->Location = System::Drawing::Point(448, 318);
 			this->lblCPU->Name = L"lblCPU";
 			this->lblCPU->Size = System::Drawing::Size(87, 13);
 			this->lblCPU->TabIndex = 13;
@@ -405,7 +410,7 @@ namespace OPERATINGSYSTEMPROJECT {
 			this->menuStrip1->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(1) { this->aboutToolStripMenuItem });
 			this->menuStrip1->Location = System::Drawing::Point(0, 0);
 			this->menuStrip1->Name = L"menuStrip1";
-			this->menuStrip1->Size = System::Drawing::Size(930, 24);
+			this->menuStrip1->Size = System::Drawing::Size(894, 24);
 			this->menuStrip1->TabIndex = 15;
 			this->menuStrip1->Text = L"menuStrip1";
 			this->menuStrip1->ItemClicked += gcnew System::Windows::Forms::ToolStripItemClickedEventHandler(this, &MyForm::menuStrip1_ItemClicked);
@@ -445,13 +450,32 @@ namespace OPERATINGSYSTEMPROJECT {
 			this->tbBT->TabIndex = 1;
 			this->tbBT->TextChanged += gcnew System::EventHandler(this, &MyForm::tbBT_TextChanged);
 			// 
+			// lbGanttChart
+			// 
+			this->lbGanttChart->FormattingEnabled = true;
+			this->lbGanttChart->Location = System::Drawing::Point(617, 335);
+			this->lbGanttChart->Name = L"lbGanttChart";
+			this->lbGanttChart->Size = System::Drawing::Size(249, 56);
+			this->lbGanttChart->TabIndex = 16;
+			// 
+			// lblRunTime
+			// 
+			this->lblRunTime->AutoSize = true;
+			this->lblRunTime->Location = System::Drawing::Point(613, 317);
+			this->lblRunTime->Name = L"lblRunTime";
+			this->lblRunTime->Size = System::Drawing::Size(52, 13);
+			this->lblRunTime->TabIndex = 17;
+			this->lblRunTime->Text = L"Run time:";
+			// 
 			// MyForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(221)), static_cast<System::Int32>(static_cast<System::Byte>(226)),
 				static_cast<System::Int32>(static_cast<System::Byte>(198)));
-			this->ClientSize = System::Drawing::Size(930, 625);
+			this->ClientSize = System::Drawing::Size(894, 625);
+			this->Controls->Add(this->lblRunTime);
+			this->Controls->Add(this->lbGanttChart);
 			this->Controls->Add(this->lblDisp);
 			this->Controls->Add(this->lblCPU);
 			this->Controls->Add(this->lblAWT);
@@ -598,6 +622,20 @@ namespace OPERATINGSYSTEMPROJECT {
 
 			// Sort processes based on ID for output display
 			sort(processes.begin(), processes.end(), compareID);
+
+			// Display process information of cpu runtime sequentially in lbgc ListBox
+			//delete first the history
+			lbGanttChart->Items->Clear();
+			for (const Process& p : processes) {
+				// Display start time
+				lbGanttChart->Items->Add(String::Format("P{0} started at {1} milliseconds.", p.id, p.startTime));
+
+				// Display end time
+				lbGanttChart->Items->Add(String::Format("P{0} ended at {1} milliseconds.", p.id, p.completionTime));
+
+				// Add a separator for clarity
+				lbGanttChart->Items->Add(" ");
+			}
 
 			// Display process information in tabular format
 			stdDetails = "{0, -15}{1, -22}{2, -22}{3, -26}{4, -26}{5, -26}";
@@ -817,6 +855,19 @@ namespace OPERATINGSYSTEMPROJECT {
 			cpuUtilization = ((maxCompletionTime - totalIdleTime) / static_cast<float>(maxCompletionTime)) * 100;
 			throughput = static_cast<float>(numProcesses) / (maxCompletionTime - minArrivalTime);
 
+			// Display process information of cpu runtime sequentially in lbgc ListBox
+			//delete first the history
+			lbGanttChart->Items->Clear();
+			for (const Process& p : processes) {
+				// Display start time
+				lbGanttChart->Items->Add(String::Format("P{0} started at {1} milliseconds.", p.id, p.startTime));
+
+				// Display end time
+				lbGanttChart->Items->Add(String::Format("P{0} ended at {1} milliseconds.", p.id, p.completionTime));
+
+				// Add a separator for clarity
+				lbGanttChart->Items->Add(" ");
+			}
 
 			// Display process information in tabular format
 			stdDetails = "{0, -15}{1, -22}{2, -22}{3, -26}{4, -26}{5, -26}{6, -26}";
@@ -1002,6 +1053,21 @@ namespace OPERATINGSYSTEMPROJECT {
 			// Sort processes by their original order
 
 			sort(processes.begin(), processes.end(), sortByOriginalOrder);
+
+			// Display process information of cpu runtime sequentially in lbgc ListBox
+			//delete first the history
+			lbGanttChart->Items->Clear();
+			for (const Process& p : processes) {
+				// Display start time
+				lbGanttChart->Items->Add(String::Format("P{0} started at {1} milliseconds.", p.id, p.startTime));
+
+				// Display end time
+				lbGanttChart->Items->Add(String::Format("P{0} ended at {1} milliseconds.", p.id, p.completionTime));
+
+				// Add a separator for clarity
+				lbGanttChart->Items->Add(" ");
+			}
+
 
 			// Display process information in tabular format
 			stdDetails = "{0, -15}{1, -22}{2, -22}{3, -26}{4, -26}{5, -26}";
