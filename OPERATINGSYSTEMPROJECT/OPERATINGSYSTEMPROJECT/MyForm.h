@@ -123,6 +123,10 @@ namespace OPERATINGSYSTEMPROJECT {
 	private: System::Windows::Forms::ListBox^ lbGanttChart;
 
 	private: System::Windows::Forms::Label^ lblRunTime;
+	private: System::Windows::Forms::GroupBox^ gbDisplayAvg;
+	private: System::Windows::Forms::Label^ lbResults;
+	private: System::Windows::Forms::Button^ btnClrtb;
+
 
 
 
@@ -145,6 +149,7 @@ namespace OPERATINGSYSTEMPROJECT {
 		/// </summary>
 		void InitializeComponent(void)
 		{
+			System::Windows::Forms::DataGridViewCellStyle^ dataGridViewCellStyle1 = (gcnew System::Windows::Forms::DataGridViewCellStyle());
 			this->rbFCFS = (gcnew System::Windows::Forms::RadioButton());
 			this->rbnpp = (gcnew System::Windows::Forms::RadioButton());
 			this->rbSRTF = (gcnew System::Windows::Forms::RadioButton());
@@ -171,9 +176,13 @@ namespace OPERATINGSYSTEMPROJECT {
 			this->tbBT = (gcnew System::Windows::Forms::TextBox());
 			this->lbGanttChart = (gcnew System::Windows::Forms::ListBox());
 			this->lblRunTime = (gcnew System::Windows::Forms::Label());
+			this->gbDisplayAvg = (gcnew System::Windows::Forms::GroupBox());
+			this->lbResults = (gcnew System::Windows::Forms::Label());
+			this->btnClrtb = (gcnew System::Windows::Forms::Button());
 			this->gbAlgo->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dgDisplay))->BeginInit();
 			this->menuStrip1->SuspendLayout();
+			this->gbDisplayAvg->SuspendLayout();
 			this->SuspendLayout();
 			// 
 			// rbFCFS
@@ -237,7 +246,7 @@ namespace OPERATINGSYSTEMPROJECT {
 			// 
 			this->lbDisplay->BackColor = System::Drawing::Color::White;
 			this->lbDisplay->FormattingEnabled = true;
-			this->lbDisplay->Location = System::Drawing::Point(239, 408);
+			this->lbDisplay->Location = System::Drawing::Point(239, 347);
 			this->lbDisplay->Name = L"lbDisplay";
 			this->lbDisplay->Size = System::Drawing::Size(627, 199);
 			this->lbDisplay->TabIndex = 6;
@@ -247,7 +256,7 @@ namespace OPERATINGSYSTEMPROJECT {
 			// 
 			this->btnClear->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(187)), static_cast<System::Int32>(static_cast<System::Byte>(197)),
 				static_cast<System::Int32>(static_cast<System::Byte>(170)));
-			this->btnClear->Location = System::Drawing::Point(84, 514);
+			this->btnClear->Location = System::Drawing::Point(75, 509);
 			this->btnClear->Name = L"btnClear";
 			this->btnClear->Size = System::Drawing::Size(89, 36);
 			this->btnClear->TabIndex = 7;
@@ -257,11 +266,27 @@ namespace OPERATINGSYSTEMPROJECT {
 			// 
 			// dgDisplay
 			// 
+			this->dgDisplay->AllowDrop = true;
+			this->dgDisplay->AllowUserToAddRows = false;
+			this->dgDisplay->AllowUserToDeleteRows = false;
 			this->dgDisplay->BackgroundColor = System::Drawing::Color::White;
 			this->dgDisplay->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
+			dataGridViewCellStyle1->Alignment = System::Windows::Forms::DataGridViewContentAlignment::MiddleLeft;
+			dataGridViewCellStyle1->BackColor = System::Drawing::SystemColors::Window;
+			dataGridViewCellStyle1->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 8.25F, System::Drawing::FontStyle::Regular,
+				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
+			dataGridViewCellStyle1->ForeColor = System::Drawing::Color::Black;
+			dataGridViewCellStyle1->SelectionBackColor = System::Drawing::SystemColors::ActiveBorder;
+			dataGridViewCellStyle1->SelectionForeColor = System::Drawing::SystemColors::HighlightText;
+			dataGridViewCellStyle1->WrapMode = System::Windows::Forms::DataGridViewTriState::False;
+			this->dgDisplay->DefaultCellStyle = dataGridViewCellStyle1;
 			this->dgDisplay->Location = System::Drawing::Point(239, 75);
+			this->dgDisplay->MultiSelect = false;
 			this->dgDisplay->Name = L"dgDisplay";
-			this->dgDisplay->Size = System::Drawing::Size(627, 230);
+			this->dgDisplay->ReadOnly = true;
+			this->dgDisplay->RowHeadersWidth = 51;
+			this->dgDisplay->SelectionMode = System::Windows::Forms::DataGridViewSelectionMode::CellSelect;
+			this->dgDisplay->Size = System::Drawing::Size(626, 230);
 			this->dgDisplay->TabIndex = 8;
 			this->dgDisplay->CellContentClick += gcnew System::Windows::Forms::DataGridViewCellEventHandler(this, &MyForm::dgDisplay_CellContentClick);
 			// 
@@ -279,7 +304,7 @@ namespace OPERATINGSYSTEMPROJECT {
 			// 
 			this->btnCompute->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(187)), static_cast<System::Int32>(static_cast<System::Byte>(197)),
 				static_cast<System::Int32>(static_cast<System::Byte>(170)));
-			this->btnCompute->Location = System::Drawing::Point(75, 283);
+			this->btnCompute->Location = System::Drawing::Point(127, 288);
 			this->btnCompute->Name = L"btnCompute";
 			this->btnCompute->Size = System::Drawing::Size(89, 36);
 			this->btnCompute->TabIndex = 2;
@@ -350,7 +375,7 @@ namespace OPERATINGSYSTEMPROJECT {
 			// 
 			this->lblHistory->AutoSize = true;
 			this->lblHistory->Font = (gcnew System::Drawing::Font(L"Lucida Bright", 20.25F));
-			this->lblHistory->Location = System::Drawing::Point(233, 369);
+			this->lblHistory->Location = System::Drawing::Point(233, 308);
 			this->lblHistory->Name = L"lblHistory";
 			this->lblHistory->Size = System::Drawing::Size(111, 32);
 			this->lblHistory->TabIndex = 10;
@@ -361,7 +386,7 @@ namespace OPERATINGSYSTEMPROJECT {
 			this->lblATT->AutoSize = true;
 			this->lblATT->Font = (gcnew System::Drawing::Font(L"Yu Gothic UI", 8.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->lblATT->Location = System::Drawing::Point(264, 318);
+			this->lblATT->Location = System::Drawing::Point(5, 18);
 			this->lblATT->Name = L"lblATT";
 			this->lblATT->Size = System::Drawing::Size(141, 13);
 			this->lblATT->TabIndex = 11;
@@ -373,7 +398,7 @@ namespace OPERATINGSYSTEMPROJECT {
 			this->lblAWT->AutoSize = true;
 			this->lblAWT->Font = (gcnew System::Drawing::Font(L"Yu Gothic UI", 8.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->lblAWT->Location = System::Drawing::Point(264, 341);
+			this->lblAWT->Location = System::Drawing::Point(5, 43);
 			this->lblAWT->Name = L"lblAWT";
 			this->lblAWT->Size = System::Drawing::Size(120, 13);
 			this->lblAWT->TabIndex = 12;
@@ -384,7 +409,7 @@ namespace OPERATINGSYSTEMPROJECT {
 			this->lblCPU->AutoSize = true;
 			this->lblCPU->Font = (gcnew System::Drawing::Font(L"Yu Gothic UI", 8.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->lblCPU->Location = System::Drawing::Point(448, 318);
+			this->lblCPU->Location = System::Drawing::Point(5, 68);
 			this->lblCPU->Name = L"lblCPU";
 			this->lblCPU->Size = System::Drawing::Size(87, 13);
 			this->lblCPU->TabIndex = 13;
@@ -407,10 +432,12 @@ namespace OPERATINGSYSTEMPROJECT {
 			// 
 			this->menuStrip1->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(187)), static_cast<System::Int32>(static_cast<System::Byte>(197)),
 				static_cast<System::Int32>(static_cast<System::Byte>(170)));
+			this->menuStrip1->ImageScalingSize = System::Drawing::Size(20, 20);
 			this->menuStrip1->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(1) { this->aboutToolStripMenuItem });
 			this->menuStrip1->Location = System::Drawing::Point(0, 0);
 			this->menuStrip1->Name = L"menuStrip1";
-			this->menuStrip1->Size = System::Drawing::Size(894, 24);
+			this->menuStrip1->Padding = System::Windows::Forms::Padding(4, 2, 0, 2);
+			this->menuStrip1->Size = System::Drawing::Size(1115, 24);
 			this->menuStrip1->TabIndex = 15;
 			this->menuStrip1->Text = L"menuStrip1";
 			this->menuStrip1->ItemClicked += gcnew System::Windows::Forms::ToolStripItemClickedEventHandler(this, &MyForm::menuStrip1_ItemClicked);
@@ -452,20 +479,61 @@ namespace OPERATINGSYSTEMPROJECT {
 			// 
 			// lbGanttChart
 			// 
+			this->lbGanttChart->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(221)), static_cast<System::Int32>(static_cast<System::Byte>(226)),
+				static_cast<System::Int32>(static_cast<System::Byte>(198)));
 			this->lbGanttChart->FormattingEnabled = true;
-			this->lbGanttChart->Location = System::Drawing::Point(617, 335);
+			this->lbGanttChart->Location = System::Drawing::Point(888, 347);
 			this->lbGanttChart->Name = L"lbGanttChart";
-			this->lbGanttChart->Size = System::Drawing::Size(249, 56);
+			this->lbGanttChart->Size = System::Drawing::Size(191, 199);
 			this->lbGanttChart->TabIndex = 16;
 			// 
 			// lblRunTime
 			// 
 			this->lblRunTime->AutoSize = true;
-			this->lblRunTime->Location = System::Drawing::Point(613, 317);
+			this->lblRunTime->Font = (gcnew System::Drawing::Font(L"Lucida Bright", 20));
+			this->lblRunTime->Location = System::Drawing::Point(883, 309);
 			this->lblRunTime->Name = L"lblRunTime";
-			this->lblRunTime->Size = System::Drawing::Size(52, 13);
+			this->lblRunTime->Size = System::Drawing::Size(137, 32);
 			this->lblRunTime->TabIndex = 17;
-			this->lblRunTime->Text = L"Run time:";
+			this->lblRunTime->Text = L"Run time";
+			this->lblRunTime->Click += gcnew System::EventHandler(this, &MyForm::lblRunTime_Click);
+			// 
+			// gbDisplayAvg
+			// 
+			this->gbDisplayAvg->Controls->Add(this->lblATT);
+			this->gbDisplayAvg->Controls->Add(this->lblCPU);
+			this->gbDisplayAvg->Controls->Add(this->lblAWT);
+			this->gbDisplayAvg->Font = (gcnew System::Drawing::Font(L"Lucida Bright", 20));
+			this->gbDisplayAvg->Location = System::Drawing::Point(888, 143);
+			this->gbDisplayAvg->Margin = System::Windows::Forms::Padding(2);
+			this->gbDisplayAvg->Name = L"gbDisplayAvg";
+			this->gbDisplayAvg->Padding = System::Windows::Forms::Padding(2);
+			this->gbDisplayAvg->Size = System::Drawing::Size(191, 96);
+			this->gbDisplayAvg->TabIndex = 0;
+			this->gbDisplayAvg->TabStop = false;
+			this->gbDisplayAvg->Enter += gcnew System::EventHandler(this, &MyForm::gbDisplayAvg_Enter);
+			// 
+			// lbResults
+			// 
+			this->lbResults->AutoSize = true;
+			this->lbResults->Font = (gcnew System::Drawing::Font(L"Lucida Bright", 20));
+			this->lbResults->Location = System::Drawing::Point(883, 116);
+			this->lbResults->Name = L"lbResults";
+			this->lbResults->Size = System::Drawing::Size(110, 32);
+			this->lbResults->TabIndex = 18;
+			this->lbResults->Text = L"Results";
+			// 
+			// btnClrtb
+			// 
+			this->btnClrtb->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(187)), static_cast<System::Int32>(static_cast<System::Byte>(197)),
+				static_cast<System::Int32>(static_cast<System::Byte>(170)));
+			this->btnClrtb->Location = System::Drawing::Point(32, 288);
+			this->btnClrtb->Name = L"btnClrtb";
+			this->btnClrtb->Size = System::Drawing::Size(89, 36);
+			this->btnClrtb->TabIndex = 19;
+			this->btnClrtb->Text = L"Clear";
+			this->btnClrtb->UseVisualStyleBackColor = false;
+			this->btnClrtb->Click += gcnew System::EventHandler(this, &MyForm::btnClrtb_Click);
 			// 
 			// MyForm
 			// 
@@ -473,13 +541,13 @@ namespace OPERATINGSYSTEMPROJECT {
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(221)), static_cast<System::Int32>(static_cast<System::Byte>(226)),
 				static_cast<System::Int32>(static_cast<System::Byte>(198)));
-			this->ClientSize = System::Drawing::Size(894, 625);
+			this->ClientSize = System::Drawing::Size(1115, 568);
+			this->Controls->Add(this->btnClrtb);
+			this->Controls->Add(this->lbResults);
+			this->Controls->Add(this->gbDisplayAvg);
 			this->Controls->Add(this->lblRunTime);
 			this->Controls->Add(this->lbGanttChart);
 			this->Controls->Add(this->lblDisp);
-			this->Controls->Add(this->lblCPU);
-			this->Controls->Add(this->lblAWT);
-			this->Controls->Add(this->lblATT);
 			this->Controls->Add(this->lblHistory);
 			this->Controls->Add(this->lblAlgo);
 			this->Controls->Add(this->lblPrio);
@@ -497,13 +565,15 @@ namespace OPERATINGSYSTEMPROJECT {
 			this->ForeColor = System::Drawing::Color::Black;
 			this->MainMenuStrip = this->menuStrip1;
 			this->Name = L"MyForm";
-			this->Text = L"MyForm";
+			this->Text = L"WMI Process Scheduling";
 			this->Load += gcnew System::EventHandler(this, &MyForm::MyForm_Load);
 			this->gbAlgo->ResumeLayout(false);
 			this->gbAlgo->PerformLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dgDisplay))->EndInit();
 			this->menuStrip1->ResumeLayout(false);
 			this->menuStrip1->PerformLayout();
+			this->gbDisplayAvg->ResumeLayout(false);
+			this->gbDisplayAvg->PerformLayout();
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
@@ -516,12 +586,23 @@ namespace OPERATINGSYSTEMPROJECT {
 		String^ stdDetails;
 
 	private: System::Void MyForm_Load(System::Object^ sender, System::EventArgs^ e) {
-
+		rbFCFS->Checked = true;
+		dgDisplay->ReadOnly = true;
 	}
 
 
 	private: System::Void btnCompute_Click(System::Object^ sender, System::EventArgs^ e) {
-		//check the algo before computation
+
+
+		// Input handling for arrival times, burst time, priority
+		if (this->tbAT->Text == "") {
+			MessageBox::Show("Arrival time cannot be empty.", "Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
+			return;
+		}
+		if (this->tbBT->Text == "") {
+			MessageBox::Show("Burst time cannot be empty.", "Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
+			return;
+		}
 
 		if (rbFCFS->Checked) {
 			// Declare variables to store process information and various metrics
@@ -753,7 +834,7 @@ namespace OPERATINGSYSTEMPROJECT {
 			// Input handling for priority
 			tempPriority = tbprio->Text;
 			if (tempPriority == "") {
-				MessageBox::Show("Priority time cannot be empty.", "Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
+				MessageBox::Show("Priority cannot be empty.", "Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
 				return;
 			}
 
@@ -1120,11 +1201,15 @@ namespace OPERATINGSYSTEMPROJECT {
 	}
 	private: System::Void rbFCFS_CheckedChanged(System::Object^ sender, System::EventArgs^ e) {
 		//hide the textbok and text if the algo is not npp
+		
 		this->tbprio->Visible = !this->rbFCFS->Checked;
 		if (rbFCFS->Checked) {
 			lblPrio->Text = "";
 			lblAlgo->Text = "First Come First Serve";
-			this->btnCompute->Location = System::Drawing::Point(72, 223);
+			this->btnCompute->Location = System::Drawing::Point(127, 230);
+			this->btnClrtb->Location = System::Drawing::Point(32, 230);
+			
+
 		}
 		else {
 			lblPrio->Text = "Priority";
@@ -1135,18 +1220,19 @@ namespace OPERATINGSYSTEMPROJECT {
 	private: System::Void rbnpp_CheckedChanged(System::Object^ sender, System::EventArgs^ e) {
 		if (rbnpp->Checked) {
 			lblAlgo->Text = "Non Preemptive Priority";
-			this->btnCompute->Location = System::Drawing::Point(75, 283);
-
+			this->btnCompute->Location = System::Drawing::Point(127, 288);
+			this->btnClrtb->Location = System::Drawing::Point(32, 288);
+			
 		}
-		else this->lbDisplay->Size = System::Drawing::Size(553, 225);
 	}
 	private: System::Void rbSRTF_CheckedChanged(System::Object^ sender, System::EventArgs^ e) {
 		//hide the textbok and text if the algo is not npp
 		this->tbprio->Visible = !this->rbSRTF->Checked;
 		if (rbSRTF->Checked) {
 			lblPrio->Text = "";
-			this->btnCompute->Location = System::Drawing::Point(72, 223);
 			lblAlgo->Text = "Shortest Remaining Time First";
+			this->btnCompute->Location = System::Drawing::Point(127, 230);
+			this->btnClrtb->Location = System::Drawing::Point(32, 230);
 		}
 
 		else {
@@ -1168,6 +1254,7 @@ namespace OPERATINGSYSTEMPROJECT {
 	}
 
 	private: System::Void dgDisplay_CellContentClick(System::Object^ sender, System::Windows::Forms::DataGridViewCellEventArgs^ e) {
+	
 	}
 	private: System::Void gbAlgo_Enter(System::Object^ sender, System::EventArgs^ e) {
 	}
@@ -1192,8 +1279,10 @@ namespace OPERATINGSYSTEMPROJECT {
 			"\n\nTERMS USED IN THE PROGRAM: "
 			"\nArrival Time (AT) – Time at which the process arrives in the ready queue. "
 			"\nBurst Time (BT) – Time required by a process for CPU execution."
+			"\nPriority - The numerical value assigned to a process, indicating its relative importance or urgency in being executed. Higher priority tasks get done first."
 			"\nTurn Around Time (TaT) – Time difference between completion time and arrival time. "
-			"\nWaiting Time (WT) – Time difference between TaT and BT. \n", "User Manual", MessageBoxButtons::OK, MessageBoxIcon::Information);
+			"\nWaiting Time (WT) – Time difference between TaT and BT." 
+			"\nCPU Utilization - Percentage of how much the computer processor is being used.", "User Manual", MessageBoxButtons::OK, MessageBoxIcon::Information);
 
 	}
 	private: System::Void menuStrip1_ItemClicked(System::Object^ sender, System::Windows::Forms::ToolStripItemClickedEventArgs^ e) {
@@ -1218,5 +1307,23 @@ namespace OPERATINGSYSTEMPROJECT {
 		);
 	}
 
-	};
+	private: System::Void lblRunTime_Click(System::Object^ sender, System::EventArgs^ e) {
+	}
+private: System::Void gbDisplayAvg_Enter(System::Object^ sender, System::EventArgs^ e) {
+}
+private: System::Void btnClrtb_Click(System::Object^ sender, System::EventArgs^ e) {
+
+	this->tbAT->Text = "";
+	this->tbBT->Text = "";
+	this->tbprio->Text = "";
+	// button clears data grid and results group
+	dgDisplay->Rows->Clear();
+	dgDisplay->Columns->Clear();
+	lbGanttChart->Items->Clear();
+	lblATT->Text = "";
+	lblAWT->Text = "";
+	lblCPU->Text = "";
+
+}
+};
 }
