@@ -150,6 +150,7 @@ namespace OPERATINGSYSTEMPROJECT {
 		void InitializeComponent(void)
 		{
 			System::Windows::Forms::DataGridViewCellStyle^ dataGridViewCellStyle1 = (gcnew System::Windows::Forms::DataGridViewCellStyle());
+			System::ComponentModel::ComponentResourceManager^ resources = (gcnew System::ComponentModel::ComponentResourceManager(MyForm::typeid));
 			this->rbFCFS = (gcnew System::Windows::Forms::RadioButton());
 			this->rbnpp = (gcnew System::Windows::Forms::RadioButton());
 			this->rbSRTF = (gcnew System::Windows::Forms::RadioButton());
@@ -563,6 +564,7 @@ namespace OPERATINGSYSTEMPROJECT {
 			this->Controls->Add(this->tbBT);
 			this->Controls->Add(this->menuStrip1);
 			this->ForeColor = System::Drawing::Color::Black;
+			this->Icon = (cli::safe_cast<System::Drawing::Icon^>(resources->GetObject(L"$this.Icon")));
 			this->MainMenuStrip = this->menuStrip1;
 			this->Name = L"MyForm";
 			this->Text = L"WMI Process Scheduling";
@@ -650,6 +652,7 @@ namespace OPERATINGSYSTEMPROJECT {
 			// Read burst times and store them in the 'bt' vector
 			vector<int> bt;
 			for (int number; isss >> number || (isss.eof() && bt.empty());) {
+				
 				bt.push_back(number);
 
 				// Check for a comma and consume it if not at the end of the input
@@ -664,6 +667,8 @@ namespace OPERATINGSYSTEMPROJECT {
 				return;
 			}
 
+			
+
 			// Initialize the number of processes
 			numProcesses = at.size();
 
@@ -674,6 +679,14 @@ namespace OPERATINGSYSTEMPROJECT {
 				process.arrivalTime = at[i];
 				process.burstTime = bt[i];
 				processes.push_back(process);
+				if (at[i] < 0) {
+					MessageBox::Show("Invalid Input", "Warning", MessageBoxButtons::OK, MessageBoxIcon::Warning);
+					return;
+				}
+				if (bt[i] < 0) {
+					MessageBox::Show("Invalid Input", "Warning", MessageBoxButtons::OK, MessageBoxIcon::Warning);
+					return;
+				}
 			}
 
 			// Sort processes based on arrival time
@@ -868,6 +881,18 @@ namespace OPERATINGSYSTEMPROJECT {
 				process.burstTime = bt[i];
 				process.priority = priority[i];
 				processes.push_back(process);
+				if (at[i] < 0) {
+					MessageBox::Show("Invalid Input", "Warning", MessageBoxButtons::OK, MessageBoxIcon::Warning);
+					return;
+				}
+				if (bt[i] < 0) {
+					MessageBox::Show("Invalid Input", "Warning", MessageBoxButtons::OK, MessageBoxIcon::Warning);
+					return;
+				}
+				if (priority[i] < 0) {
+					MessageBox::Show("Invalid Input", "Warning", MessageBoxButtons::OK, MessageBoxIcon::Warning);
+					return;
+				}
 			}
 
 			isCompleted.resize(numProcesses, 0);  // Initialize isCompleted vector
@@ -1070,7 +1095,14 @@ namespace OPERATINGSYSTEMPROJECT {
 				process.arrivalTime = at[i];
 				process.burstTime = bt[i];
 				process.remainingTime = process.burstTime;
-
+				if (at[i] < 0) {
+					MessageBox::Show("Invalid Input", "Warning", MessageBoxButtons::OK, MessageBoxIcon::Warning);
+					return;
+				}
+				if (bt[i] < 0) {
+					MessageBox::Show("Invalid Input", "Warning", MessageBoxButtons::OK, MessageBoxIcon::Warning);
+					return;
+				}
 				processes.push_back(process);
 			}
 
