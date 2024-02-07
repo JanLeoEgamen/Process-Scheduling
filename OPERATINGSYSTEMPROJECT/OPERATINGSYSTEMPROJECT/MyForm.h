@@ -660,7 +660,7 @@ namespace OPERATINGSYSTEMPROJECT {
 
 			//diplay average
 			lblATT->Text = "Average Turn Around Time: " + avgTurnaroundTime.ToString("0.00");
-			lblAWT->Text = "Average Waiting Time: " + avgTurnaroundTime.ToString("0.00");
+			lblAWT->Text = "Average Waiting Time: " + avgWaitingTime.ToString("0.00");
 			lblCPU->Text = "CPU Utilization: " + cpuUtilization.ToString("0.00") + " %";
 
 			//space
@@ -892,7 +892,7 @@ namespace OPERATINGSYSTEMPROJECT {
 
 			//diplay average
 			lblATT->Text = "Average Turn Around Time: " + avgTurnaroundTime.ToString("0.00");
-			lblAWT->Text = "Average Waiting Time: " + avgTurnaroundTime.ToString("0.00");
+			lblAWT->Text = "Average Waiting Time: " + avgWaitingTime.ToString("0.00");
 			lblCPU->Text = "CPU Utilization: " + cpuUtilization.ToString("0.00") + " %";
 
 			//space
@@ -1090,7 +1090,7 @@ namespace OPERATINGSYSTEMPROJECT {
 			//diplay average
 			lbDisplay->Items->Add(String::Format(stdDetails, " ", " ", " ", " ", "CPU Utilization: ", cpuUtilization  + " %", " ", " "));
 			lblATT->Text = "Average Turn Around Time: " + avgTurnaroundTime.ToString("0.00");
-			lblAWT->Text = "Average Waiting Time: " + avgTurnaroundTime.ToString("0.00");
+			lblAWT->Text = "Average Waiting Time: " + avgWaitingTime.ToString("0.00");
 			lblCPU->Text = "CPU Utilization: " + cpuUtilization.ToString("0.00") + " %";
 			//space
 			lbDisplay->Items->Add(" ");
@@ -1183,7 +1183,17 @@ namespace OPERATINGSYSTEMPROJECT {
 		//
 		// For User Manual
 		//
-		MessageBox::Show("This Shows The User Manual", "User Manual", MessageBoxButtons::OK, MessageBoxIcon::Information);
+		MessageBox::Show("STEP 1: Choose your preferred Process Scheduling Algorithm.\n" 
+			"\nSTEP 2: Input the arrival time and burst time (as well as the priority if the Non-Preemptive Priority Algorithm is chosen) separated by spaces/commas.\n" 
+			"\nSTEP 3: After inputting, click 'Compute'. \n"
+			"\nSTEP 4: The program will then compute the turnaround time, waiting time, and their average, as well as the CPU utilization. The result will appear in a table format and will also be stored in the History box. \n"
+			"\nSTEP 5: To clear the result history, click 'Clear History' under the scheduling algorithm choices."
+			"\nNote: The history of the Algorithms' results are only kept during the runtime of the program. \n"
+			"\n\nTERMS USED IN THE PROGRAM: "
+			"\nArrival Time (AT) – Time at which the process arrives in the ready queue. "
+			"\nBurst Time (BT) – Time required by a process for CPU execution."
+			"\nTurn Around Time (TaT) – Time difference between completion time and arrival time. "
+			"\nWaiting Time (WT) – Time difference between TaT and BT. \n", "User Manual", MessageBoxButtons::OK, MessageBoxIcon::Information);
 
 	}
 	private: System::Void menuStrip1_ItemClicked(System::Object^ sender, System::Windows::Forms::ToolStripItemClickedEventArgs^ e) {
